@@ -1,8 +1,8 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import api from "./axios";
-import { delete_cookie, get_cookie } from "../utils/Cookies";
 import { useNavigate } from "react-router-dom";
+import { delete_cookie } from "../utils/Cookies";
+import api from "./axios";
 
 
 // ME

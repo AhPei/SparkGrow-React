@@ -1,4 +1,4 @@
-import { Badge, Col, Ratio, Row } from "react-bootstrap";
+import { Badge, Col, Row } from "react-bootstrap";
 
 export default function Header({ caseID, username, image, status }) {
   return (
@@ -10,6 +10,7 @@ export default function Header({ caseID, username, image, status }) {
             <img
               title="Profile Image"
               src={image}
+              alt="Profile Image"
               // width="60px"
               // height="60px"
               className="d-inline-block align-top round thumbnail"

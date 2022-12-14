@@ -1,8 +1,8 @@
 // import PropTypes from "prop-types";
-import ChatWindow from "./ChatWindow";
-import launcherIcon from "./../assets/logo-no-bg.svg";
-import launcherIconActive from "./../assets/close-icon.png";
 import useWebSocket from "../../../hooks/useWebSocket";
+import launcherIconActive from "./../assets/close-icon.png";
+import launcherIcon from "./../assets/logo-no-bg.svg";
+import ChatWindow from "./ChatWindow";
 
 import { useEffect } from "react";
 import useSyncSessionStorage from "../../../hooks/useSyncSessionStorage";
@@ -53,8 +53,8 @@ function SupportWindow() {
         onClick={handleClick}
       >
         <MessageCount count={newMessagesCount} isOpen={isOpen} />
-        <img className={"sc-open-icon"} src={launcherIconActive} />
-        <img className={"sc-closed-icon"} src={launcherIcon} />
+        <img className={"sc-open-icon"} src={launcherIconActive} alt="icon-open" />
+        <img className={"sc-closed-icon"} src={launcherIcon} alt="icon-close" />
       </div>
       <div className={`sc-chat-window ${isOpen ? "opened" : "closed"}`}>
         <ChatWindow

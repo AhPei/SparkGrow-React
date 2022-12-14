@@ -1,10 +1,10 @@
 import { useState } from "react";
-import FloatingLabel from "../../../components/FloatingLabel";
-import Button from "../../../components/Button";
-import { useChangePassword, useResetPassword } from "../../../api";
-import { Row, Col } from "react-bootstrap";
-import isEmpty from "../../../utils/isEmpty";
+import { Col, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import { useChangePassword, useResetPassword } from "../../../api";
+import Button from "../../../components/Button";
+import FloatingLabel from "../../../components/FloatingLabel";
+import isEmpty from "../../../utils/isEmpty";
 
 export default function ChangePasswordForm({ current, onConfirm }) {
   const [error, setError] = useState({});
@@ -37,7 +37,7 @@ export default function ChangePasswordForm({ current, onConfirm }) {
     if (!isEmpty(isError)) return setError(isError);
 
     if (new_password !== re_new_password)
-      return setError({ ["re_new_password"]: "Password does not match!" });
+      return setError({ re_new_password: "Password does not match!" });
 
     setError({});
 

@@ -1,4 +1,4 @@
-import { Form, FloatingLabel, InputGroup } from "react-bootstrap";
+import { FloatingLabel, Form, InputGroup } from "react-bootstrap";
 import { VscDebugRestart } from "react-icons/vsc";
 
 const MyFloatingLabel = ({
@@ -18,11 +18,11 @@ const MyFloatingLabel = ({
     const { value, files } = e.target;
     // console.log("VALUE>>", value);
 
-    if (type === "currency") {
-      const currencyPattern = /^(?!,$)[\d,]*\.?[\d]+$/;
-      if (!currencyPattern.test(value)) return;
-      return onChange(value.toCurrency());
-    }
+    // if (type === "currency") {
+    //   const currencyPattern = /^(?!,$)[\d,]*\.?[\d]+$/;
+    //   if (!currencyPattern.test(value)) return;
+    //   return onChange(value.toCurrency());
+    // }
 
     if (type === "file") return onChange(files);
 

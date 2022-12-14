@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Container, Row, Col, Form, Card } from "react-bootstrap";
+import { Card, Container, Form, Row } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import { useLogin } from "../../api";
-import { useNavigate, Link } from "react-router-dom";
 import Button from "../../components/Button";
 import FloatingLabel from "../../components/FloatingLabel";
 
 
 // Hooks
-import useDocumentTitle from "../../hooks/useDocumentTitle";
 import toast from "react-hot-toast";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function Loginpage({ title }) {
   useDocumentTitle(title);
@@ -24,7 +24,7 @@ export default function Loginpage({ title }) {
     e.preventDefault();
     e.stopPropagation();
 
-    const validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const validEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     if (!email.match(validEmail))
       return toast.error("Please enter valid email");
     if (!email || !password) return toast.error("Please fill up all field");

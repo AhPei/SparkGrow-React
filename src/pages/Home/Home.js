@@ -1,46 +1,33 @@
-import React, { useEffect, useState } from "react";
-
-import { useNavigate } from "react-router-dom";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  FloatingLabel,
-} from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
 import {
   useProductCategory,
   useProducts,
   useSearch,
-  useSearchCategory,
+  useSearchCategory
 } from "../../api";
 
 // Component
 import Loading from "../../components/Loading";
-import Button from "../../components/Button";
 import ProductCard from "./ProductCard";
 
 // Infinite Page Loop
 import { useInView } from "react-intersection-observer";
 
 // Hooks
-import useDocumentTitle from "../../hooks/useDocumentTitle";
-import { useQueryClient } from "@tanstack/react-query";
 import useDebounce from "../../hooks/useDebounce";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function Home({ title }) {
   // Infinity Scroll
   const { ref, inView } = useInView();
-  
+
   useEffect(() => {
     if (inView) fetchNextPage();
   }, [inView]);
-  
-  const navigate = useNavigate();
+
   const [filter, setFilter] = useState("");
   const debounce = useDebounce(filter, 1000);
-  const { data: user } = useQueryClient().getQueryData(["me"]);
-  const { is_staff } = user;
   const [pid, setPid] = useState("");
 
   const {
@@ -59,17 +46,18 @@ export default function Home({ title }) {
   const { data: categoryResult, isFetching: fetchingCategory } =
     useSearchCategory(pid);
   useDocumentTitle(title, isSuccess);
-  
+
   if (isError) return <span>Error: {error.message}</span>;
 
   const Product = () => {
-    if (productLoading || categoryLoading || fetchingSearch || fetchingCategory) return <Loading color="green" />;
-    if (categoryResult) return <ProductCard data={categoryResult} /> 
-    if (search && search.length > 0 ) return <ProductCard data={search} />
-    if (search && search.length === 0 && debounce) return <ProductCard data={[]} />; 
-    return <ProductCard data={product.pages} />
-  }
-
+    if (productLoading || categoryLoading || fetchingSearch || fetchingCategory)
+      return <Loading color="green" />;
+    if (categoryResult) return <ProductCard data={categoryResult} />;
+    if (search && search.length > 0) return <ProductCard data={search} />;
+    if (search && search.length === 0 && debounce)
+      return <ProductCard data={[]} />;
+    return <ProductCard data={product.pages} />;
+  };
 
   return (
     <>
@@ -91,11 +79,15 @@ export default function Home({ title }) {
             </FloatingLabel>
           </Col>
           <Col>
-            <FloatingLabel label="Category" style={{minWidth:"100px"}}>
+            <FloatingLabel label="Category" style={{ minWidth: "100px" }}>
               <Form.Select value={pid} onChange={(e) => setPid(e.target.value)}>
                 <option value="">All</option>
                 {category?.map(({ id, name }) => (
-                  <option key={id} value={id} style={{textTransform: "capitalize"}}>
+                  <option
+                    key={id}
+                    value={id}
+                    style={{ textTransform: "capitalize" }}
+                  >
                     {name}
                   </option>
                 ))}

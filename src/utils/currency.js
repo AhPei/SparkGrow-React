@@ -1,44 +1,81 @@
 const threeDecimal = /^\d+(?=\.)(\.\d{3,})?$/;
 const oneDecimal = /^\d+(?=\.)(\.\d{1})?$/;
 
-// // String.prototype.replaceAt = (index, replacement) => {
-// function replaceAt(index, replacement) {
-String.prototype.replaceAt = function (index, replacement) {
-  if (index >= this.length) return this.valueOf();
+// String.prototype.replaceAt = function (index, replacement) {
+//   if (index >= this.length) return this.valueOf();
+//   return this.substring(0, index) + replacement + this.substring(index + 1);
+// };
 
-  return this.substring(0, index) + replacement + this.substring(index + 1);
-};
+Object.defineProperty(String.prototype, "replaceAt", {
+  value: function (index, replacement) {
+    if (index >= this.length) return this.valueOf();
+    return this.substring(0, index) + replacement + this.substring(index + 1);
+  },
+});
 
-String.prototype.toCurrency = function () {
-  // Remove comma
-  let price = this.replace(/\,/g, "");
+Object.defineProperty(String.prototype, "toCurrency", {
+  value: function () {
+    // Remove comma
+    let price = this.replace(/,/g, "");
+  
+    // Move the dot
+    [...price].forEach((value, idx) => {
+      // Right to Left
+      if (value === "." && threeDecimal.test(price)) {
+        price = price.replaceAt(idx, [...price][idx + 1]);
+        price = price.replaceAt(idx + 1, ".");
+      }
+      // Left to Right
+      else if (value === "." && oneDecimal.test(price)) {
+        price = price.replaceAt(idx, [...price][idx - 1]);
+        price = price.replaceAt(idx - 1, ".");
+      }
+    });
+    // First number will start on the last
+    const cur = Number(price);
+    if (cur === 0) return "0.00";
+    if (/^[\d]?$/g.test(price)) return (price /= 100);
+  
+    // Add comma and fixed two decimal
+    price = cur.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  
+    return price;
+  },
+});
 
-  // Move the dot
-  [...price].forEach((value, idx) => {
-    // Right to Left
-    if (value === "." && threeDecimal.test(price)) {
-      price = price.replaceAt(idx, [...price][idx + 1]);
-      price = price.replaceAt(idx + 1, ".");
-    }
-    // Left to Right
-    else if (value === "." && oneDecimal.test(price)) {
-      price = price.replaceAt(idx, [...price][idx - 1]);
-      price = price.replaceAt(idx - 1, ".");
-    }
-  });
-  // First number will start on the last
-  const cur = Number(price);
-  if (cur === 0) return "0.00";
-  if (/^[\d]?$/g.test(price)) return (price /= 100);
+// String.prototype.toCurrency = function () {
+//   // Remove comma
+//   let price = this.replace(/,/g, "");
 
-  // Add comma and fixed two decimal
-  price = cur.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+//   // Move the dot
+//   [...price].forEach((value, idx) => {
+//     // Right to Left
+//     if (value === "." && threeDecimal.test(price)) {
+//       price = price.replaceAt(idx, [...price][idx + 1]);
+//       price = price.replaceAt(idx + 1, ".");
+//     }
+//     // Left to Right
+//     else if (value === "." && oneDecimal.test(price)) {
+//       price = price.replaceAt(idx, [...price][idx - 1]);
+//       price = price.replaceAt(idx - 1, ".");
+//     }
+//   });
+//   // First number will start on the last
+//   const cur = Number(price);
+//   if (cur === 0) return "0.00";
+//   if (/^[\d]?$/g.test(price)) return (price /= 100);
 
-  return price;
-};
+//   // Add comma and fixed two decimal
+//   price = cur.toLocaleString(undefined, {
+//     minimumFractionDigits: 2,
+//     maximumFractionDigits: 2,
+//   });
+
+//   return price;
+// };
 
 // const currency = (price) => {
 //   // Remove comma
@@ -63,7 +100,7 @@ String.prototype.toCurrency = function () {
 
 //   // First number will start on the last
 //   const cur = Number(price);
-//   if (/^[\d]?$/g.test(price)) 
+//   if (/^[\d]?$/g.test(price))
 //     return (price /= 100);
 
 //   // Add comma and fixed two decimal

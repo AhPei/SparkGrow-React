@@ -2,24 +2,20 @@ import React, { useState } from "react";
 import Support from "../pages/SupportEngine";
 import Loading from "./Loading";
 
-import {
-  Container,
-  Navbar,
-  Form,
-  Nav,
-  Offcanvas,
-  Dropdown,
-} from "react-bootstrap";
 import { MDBBadge } from "mdb-react-ui-kit";
+import {
+  Container, Dropdown, Form,
+  Nav, Navbar, Offcanvas
+} from "react-bootstrap";
 
 import { useNavigate } from "react-router-dom";
 
 // hooks
 import useDebounce from "../hooks/useDebounce";
 
-import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
-import { useCartLength, useSearch } from "../api";
 import { useQueryClient } from "@tanstack/react-query";
+import { useCartLength, useSearch } from "../api";
+import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
 
 // Logo
 import Logo from "../assets/logo.png";
@@ -51,7 +47,7 @@ export default function Header({ children }) {
   const { length } = useCartLength();
 
   const openSearch = () => {
-    if (!debounce || debounce == "") return setOpen(false);
+    if (!debounce || debounce === "") return setOpen(false);
     setOpen(true);
   };
 

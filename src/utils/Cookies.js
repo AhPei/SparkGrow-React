@@ -21,5 +21,5 @@ export function doesHttpOnlyCookieExist(cookiename) {
   var expires = "expires=" + d.toUTCString();
 
   document.cookie = cookiename + "=new_value;path=/;" + expires;
-  return document.cookie.indexOf(cookiename + '=') == -1;
+  return document.cookie.indexOf(cookiename + '=') === -1;
 }

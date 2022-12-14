@@ -1,8 +1,7 @@
-import Loading from "../../components/Loading";
 import { Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAllOrder } from "../../api";
-import { useEffect } from "react";
+import Loading from "../../components/Loading";
 
 export default function Orders() {
   const { isLoading, data: orders } = useAllOrder();

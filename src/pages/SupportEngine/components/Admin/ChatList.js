@@ -36,7 +36,7 @@ export default function ChatList({ chatList, handleSelect, case_ID }) {
             >
               <Col xs={2} className="pe-0 my-auto">
                 <Ratio aspectRatio="1x1">
-                  <img src={image} className="thumbnail" />
+                  <img src={image} alt="User Profile" className="thumbnail" />
                 </Ratio>
               </Col>
               <Col style={{ fontSize: "max(16px, 0.8vw)" }}>

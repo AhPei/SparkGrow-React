@@ -1,12 +1,12 @@
 import { useState } from "react";
-import FloatingLabel from "../../components/FloatingLabel";
-import ComfirmModel from "../../components/ComfirmModel";
-import Button from "../../components/Button";
-import { useSendResetPassword } from "../../api";
-import { useNavigate } from "react-router-dom";
-import useDocumentTitle from "../../hooks/useDocumentTitle";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { IoMdReturnLeft } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+import { useSendResetPassword } from "../../api";
+import Button from "../../components/Button";
+import ComfirmModel from "../../components/ComfirmModel";
+import FloatingLabel from "../../components/FloatingLabel";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function SendResetPassword({ title }) {
   useDocumentTitle(title);
@@ -21,13 +21,13 @@ export default function SendResetPassword({ title }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (email === "") return setError({ ["email"]: "This field is required." });
+    if (email === "") return setError({ email: "This field is required." });
 
     setError({});
 
     const error = (err) => {
       const data = err.response.data;
-      setError({ ["email"]: data[0] });
+      setError({ email: data[0] });
     };
 
     const success = () => setShow(true);

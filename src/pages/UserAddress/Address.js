@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Col, Container, Row, Form, Card, Modal } from "react-bootstrap";
-import { useAllAddress, useRemoveAddress, useUpdateAddress } from "../../api";
-import Loading from "../../components/Loading";
-import Button from "../../components/Button";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { AiOutlineEdit } from "react-icons/ai";
 import { ImBin } from "react-icons/im";
+import { useAllAddress, useRemoveAddress, useUpdateAddress } from "../../api";
+import Button from "../../components/Button";
 import IsConfirm from "../../components/IsConfirm";
+import Loading from "../../components/Loading";
 import AddressForm from "./AddressForm";
 
 export default function Address() {

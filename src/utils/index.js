@@ -1,8 +1,7 @@
-import { get_cookie, delete_cookie,doesHttpOnlyCookieExist } from "./Cookies";
-import { emailPattern } from "./Regex";
+import { delete_cookie, doesHttpOnlyCookieExist, get_cookie } from "./Cookies";
 import isEmpty from "./isEmpty";
 import PrivateRoute from "./PrivateRoute";
-import SupportRoute from "./SupportRoute";
+import { emailPattern } from "./Regex";
 import Unauthorized from "./Unauthorized";
 
 export {
@@ -12,6 +11,6 @@ export {
   emailPattern,
   isEmpty,
   PrivateRoute,
-  SupportRoute,
   Unauthorized,
 };
+

@@ -1,11 +1,11 @@
 import {
-  useQuery,
-  useMutation,
   useInfiniteQuery,
-  useQueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient
 } from "@tanstack/react-query";
-import api from "./axios";
 import useSyncLocalStorage from "../hooks/useSyncLocalStorage";
+import api from "./axios";
 
 // Cart Length
 export const useCartLength = () => {
@@ -21,7 +21,7 @@ export const useCartLength = () => {
 
   useQuery(["cartLength", uid], () => api.get("order/cart"), {
     onSuccess: (results) => setLength(results),
-    onError: (err) => setLength(0),
+    onError: () => setLength(0),
     select: (data) =>
       data.data.filter(({ stock }) => stock !== 0 && stock).length,
     enabled: !!uid,

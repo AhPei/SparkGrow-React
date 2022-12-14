@@ -1,7 +1,5 @@
-import TextMessage from "./TextMessage";
-import EmojiMessage from "./EmojiMessage";
-import FileMessage from "./FileMessage";
 import chatIconUrl from "./../../assets/chat-icon.svg";
+import TextMessage from "./TextMessage";
 
 export default function index({ message }) {
   return (

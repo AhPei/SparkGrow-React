@@ -1,17 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import toast, { Toaster } from "react-hot-toast";
+import App from "./App";
 
 // utils
-import "./utils/currency";
+// import "./utils/currency";
 
 // React Query
 import {
   MutationCache,
   QueryCache,
   QueryClient,
-  QueryClientProvider,
+  QueryClientProvider
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -25,7 +25,6 @@ import "./App.css";
 // Bootstrap Bundle JS
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
-import api from "./api/axios";
 
 function isNetworkError(err) {
   // return !!err.isAxiosError && err.code == "ERR_NETWORK";

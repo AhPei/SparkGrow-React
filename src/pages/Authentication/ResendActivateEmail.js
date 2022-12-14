@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { IoMdReturnLeft } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import { useSendResetActivation } from "../../api";
 
 import Button from "../../components/Button";
 import FloatingLabel from "../../components/FloatingLabel";
-import ComfirmModel from "../../components/ComfirmModel";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function ResendActivateEmail({ title }) {
@@ -15,42 +14,25 @@ export default function ResendActivateEmail({ title }) {
 
   const [error, setError] = useState({});
   const [email, setEmail] = useState("");
-  const [show, setShow] = useState(false);
-
   const { isLoading, mutate: resend } = useSendResetActivation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (email === "") return setError({ ["email"]: "This field is required." });
+    if (email === "") return setError({ email: "This field is required." });
 
     setError({});
 
-    const error = (err) => {
+    const onError = (err) => {
       const data = err.response.data;
-      setError({ ["email"]: data });
+      setError(data);
     };
-    const success = () => setShow(true);
-    resend(
-      { email },
-      {
-        onError: error,
-        onSuccess: success,
-      }
-    );
+    const onSuccess = () => toast.success("Email was sent successfully");
+    resend({ email }, { onError, onSuccess });
   };
 
   return (
     <>
-      <ComfirmModel
-        show={show}
-        setShow={setShow}
-        onClick={() => navigate("/")}
-        title="Email was sent successfully"
-        body="Please check your email to activate your account."
-        confirm="OK"
-        stick
-      />
       <Container className="screen-center">
         <Card className="p-3" style={{ width: "30%" }}>
           <Row>

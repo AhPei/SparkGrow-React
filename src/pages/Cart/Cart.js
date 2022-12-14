@@ -1,19 +1,19 @@
 import React, { useRef, useState } from "react";
+import { Card, Col, Container, Form, Ratio, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Card, Form, Ratio } from "react-bootstrap";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { MDBBadge } from "mdb-react-ui-kit";
 
 // Components
 import Button from "../../components/Button";
-import Loading from "../../components/Loading";
 import ComfirmModel from "../../components/ComfirmModel";
+import Loading from "../../components/Loading";
 
 // Hooks
-import useDocumentTitle from "../../hooks/useDocumentTitle";
-import useDidUpdateEffect from "../../hooks/useDidUpdateEffect";
 import { useCart, useRemoveCart, useUpdateCart } from "../../api";
+import useDidUpdateEffect from "../../hooks/useDidUpdateEffect";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 // Icon
 import { ImBin } from "react-icons/im";
@@ -28,7 +28,7 @@ export default function Cart({ title }) {
   // Mutations
   const queryClient = useQueryClient();
 
-  const { isLoading, isError, error, data: cart, isSuccess } = useCart();
+  const { isLoading, data: cart, isSuccess } = useCart();
   const { mutate: removeCart } = useRemoveCart();
   const { mutate: updateCart } = useUpdateCart();
 
@@ -40,7 +40,7 @@ export default function Cart({ title }) {
     if (checked) {
       cart.map(({ id, stock, quantity }) => {
         if (!selectedList.includes(id) && stock > 0 && stock >= quantity)
-          setSelectedList((prev) => [...prev, id]);
+          return setSelectedList((prev) => [...prev, id]);
       });
     } else {
       setSelectedList([]);
@@ -81,9 +81,9 @@ export default function Cart({ title }) {
     const { value } = e.target;
     let preV = preValue.current;
 
-    if (preV == "" || preV == null) preV = 1;
+    if (preV === "" || preV == null) preV = 1;
 
-    if (!e.target.validity.valid || value == "" || value == null) {
+    if (!e.target.validity.valid || value === "" || value === null) {
       return queryClient.setQueryData(["cart", uid], (old) => ({
         ...old,
         pages: old?.pages.map((page) => ({
@@ -135,10 +135,7 @@ export default function Cart({ title }) {
   const calculate = () => {
     const items = cart?.filter((data) => selectedList.includes(data.id));
     let sub = 0;
-    items?.map(({ unitprice, quantity }) => {
-      sub += unitprice * quantity;
-    });
-
+    items?.map(({ unitprice, quantity }) => (sub += unitprice * quantity));
     setSubtotal(sub.toFixed(2));
   };
 
@@ -148,9 +145,7 @@ export default function Cart({ title }) {
   const checkout = () => {
     const items = cart.filter((data) => selectedList.includes(data.id));
     let sub = 0;
-    items.map(({ unitprice, quantity }) => {
-      sub += unitprice * quantity;
-    });
+    items.map(({ unitprice, quantity }) => (sub += unitprice * quantity));
     sub = sub.toFixed(2);
     setSubtotal(sub);
     navigate("/checkout", { state: { items, total: sub } });
@@ -158,8 +153,7 @@ export default function Cart({ title }) {
 
   if (isLoading) return <Loading />;
 
-  if (cart?.length === 0) return <EmptyCart />
-  
+  if (cart?.length === 0) return <EmptyCart />;
 
   return (
     <>

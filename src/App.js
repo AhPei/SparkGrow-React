@@ -3,14 +3,10 @@ import { lazy, Suspense } from "react";
 
 // Private Route
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
+  BrowserRouter as Router, Route, Routes
 } from "react-router-dom";
 import PrivateRoute from "./utils/PrivateRoute";
 import Unauthorized from "./utils/Unauthorized";
-import SupportRoute from "./utils/SupportRoute";
 
 // Pages
 const Home = lazy(() => import("./pages/Home"));
@@ -68,8 +64,6 @@ function App() {
             />
             <Route path="/checkout" element={<Checkout title="Checkout" />} />
             <Route path="/order/:id" element={<Order title="Order" />} />
-          </Route>
-          <Route path="/" element={<SupportRoute success={success} />}>
             <Route path="/supporter" element={<SupportAdmin />} />
           </Route>
           <Route path="/" element={<Unauthorized success={success} />}>

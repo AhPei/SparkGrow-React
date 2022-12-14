@@ -1,7 +1,5 @@
-import PropTypes from "prop-types";
 import { useRef, useState } from "react";
 import SendIcon from "./icons/SendIcon";
-import FileIcon from "./icons/FileIcon";
 
 function UserInput({ onSubmit, disabled }) {
   const [inputActive, setInputActive] = useState(false);
@@ -10,11 +8,9 @@ function UserInput({ onSubmit, disabled }) {
 
   const submitText = (event) => {
     event.preventDefault();
-    // const text = event.target.innerHTML;
     const text = userInput.current.value;
     if (text && text.length > 0) {
       onSubmit(text);
-      // event.target.innerHTML = "";
       userInput.current.value = "";
     }
   };
@@ -25,8 +21,7 @@ function UserInput({ onSubmit, disabled }) {
     }
   };
 
-  const handleKeyUp = (event) => {
-    // const target = event.target.innerHTML;
+  const handleKeyUp = () => {
     const target = userInput.current.value;
     const inputHasText = target.length !== 0 && target !== "\n";
     setInputHasText(inputHasText);
@@ -39,10 +34,7 @@ function UserInput({ onSubmit, disabled }) {
       }`}
     >
       <input
-        // role="button"
-        // tabIndex="0"
         ref={userInput}
-        // contentEditable="true"
         onFocus={() => setInputActive(true)}
         onBlur={() => setInputActive(false)}
         onKeyDown={handleKeyDown}
@@ -62,13 +54,14 @@ function UserInput({ onSubmit, disabled }) {
   );
 }
 
+export default UserInput;
+
 // UserInput.propTypes = {
 //   onSubmit: PropTypes.func.isRequired,
 //   onFilesSelected: PropTypes.func.isRequired,
 //   showEmoji: PropTypes.bool,
 // };
 
-export default UserInput;
 
 // import PropTypes from "prop-types";
 // import { useRef, useState } from "react";

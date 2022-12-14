@@ -44,10 +44,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "remove": "if exist ../backend/build rd /s /q ..\\backend\\build",
-    "move": "move build ../backend/",
-    "rebuild": "npm run remove && npm run build && npm run move"
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +52,7 @@
       "react-app/jest"
     ]
   },
+  "eslintIgnore": ["*.js"],
   "browserslist": {
     "production": [
       ">0.2%",

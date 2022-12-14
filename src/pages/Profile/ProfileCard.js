@@ -1,18 +1,17 @@
-import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Row, Col, Card, Form } from "react-bootstrap";
-import { useDeleteAccount, useUpdate, Logout } from "../../api";
+import { useState } from "react";
+import { Card, Col, Form, Row } from "react-bootstrap";
+import { Logout, useDeleteAccount, useUpdate } from "../../api";
 
 // Icon
 import { HiOutlineLogout } from "react-icons/hi";
-import { IoMdSettings } from "react-icons/io";
-import { IoMdReturnLeft } from "react-icons/io";
+import { IoMdReturnLeft, IoMdSettings } from "react-icons/io";
 
 // Components
-import ResetPassword from "../ResetPassword";
-import ComfirmModel from "../../components/ComfirmModel";
 import Button from "../../components/Button";
+import ComfirmModel from "../../components/ComfirmModel";
 import FloatingLabel from "../../components/FloatingLabel";
+import ResetPassword from "../ResetPassword";
 
 // Hooks
 import { useNavigate } from "react-router-dom";
@@ -81,7 +80,7 @@ export default function ProfileCard() {
 
   const handleDeleteAccount = () => {
     if (!current_password)
-      return setError({ ["current_password"]: "Please enter your password." });
+      return setError({ current_password: "Please enter your password." });
 
     const onError = (err) => {
       const data = err.response.data;

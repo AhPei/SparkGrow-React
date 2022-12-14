@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-import { Container, Row, Col, Ratio } from "react-bootstrap";
+import { Col, Container, Ratio, Row } from "react-bootstrap";
 
 import Button from "../../components/Button";
 import Loading from "../../components/Loading";
@@ -9,7 +9,6 @@ import MultipleImage from "../../components/MultipleImage";
 // Hooks
 import { useAddCart, useSpecificProducts } from "../../api";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
-import { useQueryClient } from "@tanstack/react-query";
 
 // import AddProduct from "./AddProduct";
 import toast from "react-hot-toast";
@@ -38,9 +37,6 @@ export default function Product({ title }) {
       onSuccess: () => toast.success("Item added to cart."),
     });
   };
-
-  const queryClient = useQueryClient();
-  const { data: user } = queryClient.getQueryData(["me"]);
 
   if (isLoading) return <Loading />;
 
