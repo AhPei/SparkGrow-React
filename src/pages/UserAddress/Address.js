@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { AiOutlineEdit } from "react-icons/ai";
 import { ImBin } from "react-icons/im";

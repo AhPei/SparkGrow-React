@@ -1,8 +1,7 @@
 import { MDBSpinner } from "mdb-react-ui-kit";
-import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
-export default function Loading({color, className, style}) {
+export default function Loading({ color, className, style }) {
   if (color === "red") color = "danger";
   if (color === "orange") color = "warning";
   if (color === "green") color = "success";
@@ -16,8 +15,8 @@ export default function Loading({color, className, style}) {
     <Container>
       <Row>
         <Col
-        className={"screen-center " + className}
-        style={style}
+          className={"screen-center " + className}
+          style={style}
           // className="d-flex align-items-center justify-content-center text-center "
           // style={{ minHeight: "90vh" }}
         >

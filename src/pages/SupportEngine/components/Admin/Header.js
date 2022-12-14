@@ -10,7 +10,7 @@ export default function Header({ caseID, username, image, status }) {
             <img
               title="Profile Image"
               src={image}
-              alt="Profile Image"
+              alt="Profile"
               // width="60px"
               // height="60px"
               className="d-inline-block align-top round thumbnail"

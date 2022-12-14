@@ -1,6 +1,5 @@
-import React from "react";
-import { Button } from "react-bootstrap";
 import { MDBSpinner } from "mdb-react-ui-kit";
+import { Button } from "react-bootstrap";
 
 export default function MyButton({ loading, disabled, children, ...props }) {
   return (

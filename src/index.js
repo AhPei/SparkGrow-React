@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import toast, { Toaster } from "react-hot-toast";
 import App from "./App";
@@ -24,7 +23,6 @@ import "./App.css";
 
 // Bootstrap Bundle JS
 import "bootstrap/dist/js/bootstrap.bundle.min";
-
 
 function isNetworkError(err) {
   // return !!err.isAxiosError && err.code == "ERR_NETWORK";
@@ -68,8 +66,8 @@ const queryClient = new QueryClient({
         // Refetch mutate after get new token
         await mutation.options
           .mutationFn(variables)
-          .then(() => mutation.options.onSuccess())
-          // .catch((err) => mutation.options?.onError());
+          .then(() => mutation.options.onSuccess());
+        // .catch((err) => mutation.options?.onError());
         toast.error(error.response.data.detail, {
           id: "errorOnCache",
         });

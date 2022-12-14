@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Card, Col, Container, Form, Ratio, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
@@ -41,6 +41,7 @@ export default function Cart({ title }) {
       cart.map(({ id, stock, quantity }) => {
         if (!selectedList.includes(id) && stock > 0 && stock >= quantity)
           return setSelectedList((prev) => [...prev, id]);
+        return;
       });
     } else {
       setSelectedList([]);
@@ -97,7 +98,7 @@ export default function Cart({ title }) {
 
     // if (value > stock) return (e.target.value = stock);
 
-    if (value == preV) return;
+    if (value === preV) return;
 
     updateCart({ id, value });
   };

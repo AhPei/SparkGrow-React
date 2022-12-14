@@ -1,9 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { delete_cookie } from "../utils/Cookies";
 import api from "./axios";
-
 
 // ME
 export const useUser = () => {
@@ -17,7 +15,6 @@ export const useUser = () => {
 // Login
 export const useLogin = () => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   return useMutation((body) => api.post(`auth/jwt/create/`, body), {
     onSuccess: async() => {
       toast.success("Successfully Login!");
