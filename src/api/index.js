@@ -27,8 +27,8 @@ import {
 import {
   useAllAddress,
   useAddAddress,
-  updateAddress,
-  removeAddress,
+  useUpdateAddress,
+  useRemoveAddress,
 } from "./userAddress";
 
 export default axios;
@@ -60,6 +60,6 @@ export {
   useDeleteAccount,
   useAllAddress,
   useAddAddress,
-  updateAddress,
-  removeAddress,
+  useUpdateAddress,
+  useRemoveAddress,
 };

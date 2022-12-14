@@ -26,7 +26,7 @@ export default function Activate() {
   }, []);
 
   const login = () => navigate("/", { replace: true });
-  // const resend = () => navigate("/resend/activate");
+  const resend = () => navigate("/resend/activate");
 
   if (isLoading) return <Loading />;
 

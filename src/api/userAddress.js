@@ -32,7 +32,7 @@ export const useAddAddress = () => {
   });
 };
 // Update User Address
-export const updateAddress = (aid) => {
+export const useUpdateAddress = (aid) => {
   const queryClient = useQueryClient();
   const { data } = queryClient.getQueryData(["me"]);
   const uid = data?.id;
@@ -52,7 +52,7 @@ export const updateAddress = (aid) => {
 };
 
 // Delete User Address
-export const removeAddress = () => {
+export const useRemoveAddress = () => {
   const queryClient = useQueryClient();
   const { data } = queryClient.getQueryData(["me"]);
   const uid = data?.id;

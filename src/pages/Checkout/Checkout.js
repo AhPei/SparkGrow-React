@@ -15,8 +15,6 @@ export default function Checkout({ title }) {
 
   const { state } = useLocation();
 
-  if (!state) return <Navigate to="/cart" replace />;
-
   const { items, total } = state;
 
   const { data: address, isLoading } = useAllAddress();
@@ -42,8 +40,6 @@ export default function Checkout({ title }) {
       address_id: select,
     };
 
-    console.log("Body",body)
-
     api.post("payment/checkout/", body).then(async ({ data }) => {
       var stripe = await loadStripe(data.stripe_public_key);
       await stripe
@@ -57,6 +53,8 @@ export default function Checkout({ title }) {
         });
     });
   };
+
+  if (!state) return <Navigate to="/cart" replace />;
 
   return (
     <>

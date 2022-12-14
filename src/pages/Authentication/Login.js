@@ -13,10 +13,8 @@ import toast from "react-hot-toast";
 export default function Loginpage({ title }) {
   useDocumentTitle(title);
 
-  const [email, setEmail] = useState("admin@admin.com");
-  const [password, setPassword] = useState("admin");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const { isLoading, isSuccess, mutate: login } = useLogin();
 

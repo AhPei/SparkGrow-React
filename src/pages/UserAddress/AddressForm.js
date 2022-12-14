@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row, Form, Card, Modal } from "react-bootstrap";
-import {
-  useAddAddress,
-  useAllAddress,
-  removeAddress,
-  updateAddress,
-} from "../../api";
-import Loading from "../../components/Loading";
+import { Col, Row, Form, Modal } from "react-bootstrap";
+import { useAddAddress, useUpdateAddress } from "../../api";
 import Button from "../../components/Button";
 import FloatingLabel from "../../components/FloatingLabel";
-// Icon
-import { AiOutlineEdit } from "react-icons/ai";
-import { ImBin } from "react-icons/im";
 import isEmpty from "../../utils/isEmpty";
-import IsConfirm from "../../components/IsConfirm";
 
 export default function AddressForm({ show, setShow, data }) {
   const {
@@ -46,7 +36,7 @@ export default function AddressForm({ show, setShow, data }) {
   }, [data]);
 
   const { mutate: add } = useAddAddress();
-  const { mutate: update } = updateAddress(id);
+  const { mutate: update } = useUpdateAddress(id);
 
   const handleSubmit = () => {
     const err = {};
@@ -69,13 +59,13 @@ export default function AddressForm({ show, setShow, data }) {
     if (country !== old_country) body.country = country;
 
     const success = () => {
-      setShow(false)
-      setConsignee("")
-      setContact("")
-      setAddress("")
-      setPostcode("")
-      setCity("")
-      setCountry("")
+      setShow(false);
+      setConsignee("");
+      setContact("");
+      setAddress("");
+      setPostcode("");
+      setCity("");
+      setCountry("");
     };
 
     if (data) {

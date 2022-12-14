@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Col, Container, Row, Form, Card, Modal } from "react-bootstrap";
-import {
-  useAddAddress,
-  useAllAddress,
-  removeAddress,
-  updateAddress,
-} from "../../api";
+import { useAllAddress, useRemoveAddress, useUpdateAddress } from "../../api";
 import Loading from "../../components/Loading";
 import Button from "../../components/Button";
-import FloatingLabel from "../../components/FloatingLabel";
-// Icon
 import { AiOutlineEdit } from "react-icons/ai";
 import { ImBin } from "react-icons/im";
-import isEmpty from "../../utils/isEmpty";
 import IsConfirm from "../../components/IsConfirm";
 import AddressForm from "./AddressForm";
 
@@ -20,14 +12,13 @@ export default function Address() {
   const [edit, setEdit] = useState(false);
   const [add, setAdd] = useState(false);
   const [editData, setEditData] = useState({});
-  // const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showDeleteData, setShowDeleteData] = useState("");
 
   const { data: address, isLoading } = useAllAddress();
-  const { mutate: remove } = removeAddress();
+  const { mutate: remove } = useRemoveAddress();
 
-  const { mutate: update } = updateAddress(showDeleteData);
+  const { mutate: update } = useUpdateAddress(showDeleteData);
   const handleSetDefault = () => update({ isDefault: true });
 
   if (isLoading) return <Loading />;
