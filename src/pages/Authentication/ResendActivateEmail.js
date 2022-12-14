@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
+import { toast } from "react-hot-toast";
 import { IoMdReturnLeft } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useSendResetActivation } from "../../api";
