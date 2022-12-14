@@ -1,0 +1,15 @@
+/* d-flex justify-content-center */
+.screen-center {
+  display: flex;
+  justify-content: center;
+  
+  align-items: center;
+  height: 90vh;
+  /* text-align:center; */
+
+  /* position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1; */
+}
