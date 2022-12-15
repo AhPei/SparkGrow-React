@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/569.c2012e27.chunk.js","mappings":"6KAEe,SAASA,IACtB,OAAO,SAAC,IAAD,GACR,C","sources":["pages/Checkout/Payment_Failed.js"],"sourcesContent":["import Payment from \"./Payment\"\r\n\r\nexport default function Payment_Failed() {\r\n  return <Payment />\r\n}\r\n"],"names":["Payment_Failed"],"sourceRoot":""}

@@ -43,8 +43,8 @@
     "websocket": "^1.0.34"
   },
   "scripts": {
-    "build": "react-scripts build",
     "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test"
   },
   "eslintConfig": {
