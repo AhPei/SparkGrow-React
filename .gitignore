@@ -1,5 +1,6 @@
 # React
 
+build
 node_modules
 *.env
 Playground/
