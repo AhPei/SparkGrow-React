@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
-import { Logout, useDeleteAccount, useUpdate } from "../../api";
+import { useDeleteAccount, useLogout, useUpdate } from "../../api";
 
 // Icon
 import { HiOutlineLogout } from "react-icons/hi";
@@ -77,6 +77,7 @@ export default function ProfileCard() {
 
   const { mutate: deleteAccount, isLoading: deleteLoading } =
     useDeleteAccount();
+  const { mutate: logout } = useLogout();
 
   const handleDeleteAccount = () => {
     if (!current_password)
@@ -108,11 +109,7 @@ export default function ProfileCard() {
           className="icon"
           size="2rem"
         />
-        <HiOutlineLogout
-          onClick={() => Logout(queryClient)}
-          className="icon"
-          size="2rem"
-        />
+        <HiOutlineLogout onClick={logout} className="icon" size="2rem" />
       </div>
     );
   }

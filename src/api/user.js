@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Logout } from "./auth";
 import toast from "react-hot-toast";
+import { useLogout } from "./auth";
 import api from "./axios";
 
 // Change Password
@@ -62,6 +62,7 @@ export const useUpdate = () => {
 // Delete Acccount
 export const useDeleteAccount = () => {
   const queryClient = useQueryClient();
+  const {mutate: logout } = useLogout()
 
   return useMutation(
     (data) =>
@@ -69,7 +70,7 @@ export const useDeleteAccount = () => {
         data, // Must use data
       }),
     {
-      onSuccess: () => Logout(queryClient),
+      onSuccess: logout,
       // retry: 5,
       // retryDelay: 3000, // 3 seconds
     }

@@ -1,34 +1,18 @@
+import { useActivation, useLogin, useLogout, useRegister, useUser } from "./auth";
 import axios from "./axios";
-import { useUser, useLogin, useRegister, useActivation, Logout } from "./auth";
 import {
-  useCartLength,
-  useCart,
-  useAddCart,
-  useUpdateCart,
-  useRemoveCart,
+  useAddCart, useCart, useCartLength, useRemoveCart, useUpdateCart
 } from "./cart";
 import { useAllOrder, useGetOrder } from "./order";
 import {
-  useProducts,
-  useSpecificProducts,
-  useSearch,
-  useProductsPage,
-  useProductCategory,
-  useSearchCategory,
+  useProductCategory, useProducts, useProductsPage, useSearch, useSearchCategory, useSpecificProducts
 } from "./product";
 import {
-  useChangePassword,
-  useSendResetPassword,
-  useResetPassword,
-  useSendResetActivation,
-  useUpdate,
-  useDeleteAccount,
+  useChangePassword, useDeleteAccount, useResetPassword,
+  useSendResetActivation, useSendResetPassword, useUpdate
 } from "./user";
 import {
-  useAllAddress,
-  useAddAddress,
-  useUpdateAddress,
-  useRemoveAddress,
+  useAddAddress, useAllAddress, useRemoveAddress, useUpdateAddress
 } from "./userAddress";
 
 export default axios;
@@ -38,7 +22,7 @@ export {
   useLogin,
   useRegister,
   useActivation,
-  Logout,
+  useLogout,
   useCartLength,
   useCart,
   useAddCart,
@@ -63,3 +47,4 @@ export {
   useUpdateAddress,
   useRemoveAddress,
 };
+

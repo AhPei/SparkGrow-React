@@ -61,26 +61,32 @@ const queryClient = new QueryClient({
   }),
   mutationCache: new MutationCache({
     onError: async (error, variables, context, mutation) => {
-      if (error.response?.data?.detail) {
+      const { status, data } = error.response;
+      const { retry, onSuccess, mutationFn } = mutation.options;
+
+      if (data?.detail) {
         await queryClient.invalidateQueries(["me"]);
         // Refetch mutate after get new token
-        await mutation.options
-          .mutationFn(variables)
-          .then(() => mutation.options.onSuccess());
-        // .catch((err) => mutation.options?.onError());
-        toast.error(error.response.data.detail, {
-          id: "errorOnCache",
-        });
-        return;
+        return await mutationFn(variables)
+          .then(() => onSuccess())
+          .catch((err) => toast.error(err.response.data.detail, {
+            id: "failInOnCache",
+          }));
       }
+
       // 🎉 only show error toasts if we already have data in the cache
       // which indicates a failed background update
-      if (error.response?.status >= 500 || error.response?.status == 0) {
+      // Network Error
+      if (status >= 500 || status == 0) {
         toast.error(`Mutation Cache: ${error.message}`, {
           id: "Mutation_Error",
         });
-        toast.dismiss(context);
+        return toast.dismiss(context);
       }
+
+      toast.error(data.detail, {
+        id: "errorOnCache",
+      });
     },
   }),
 });

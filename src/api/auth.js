@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { delete_cookie } from "../utils/Cookies";
 import api from "./axios";
 
@@ -7,8 +8,6 @@ import api from "./axios";
 export const useUser = () => {
   return useQuery(["me"], () => api.get("auth/users/me/"), {
     select: (data) => data.data,
-    // onError: () => setLogin(0),
-    // onSuccess: () => setLogin(1),
   });
 };
 
@@ -16,7 +15,7 @@ export const useUser = () => {
 export const useLogin = () => {
   const queryClient = useQueryClient();
   return useMutation((body) => api.post(`auth/jwt/create/`, body), {
-    onSuccess: async() => {
+    onSuccess: async () => {
       toast.success("Successfully Login!");
       await queryClient.invalidateQueries(["me"]);
     },
@@ -43,20 +42,21 @@ export const useActivation = () => {
   });
 };
 
-export const Logout = (queryClient) => {
-  const fetch = api.get("auth/users/logout/").finally(() => {
-    delete_cookie("login_token");
-    queryClient.setQueryData(["me"], () => null);  
-    queryClient.invalidateQueries(["me"]);
+// Logout
+export const useLogout = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  return useMutation(() => api.get("auth/users/logout/"), {
+    onMutate: async () => {
+      delete_cookie("login_token");
+      await queryClient.setQueryData(["me"], () => null);
+      localStorage.removeItem("open");
+      localStorage.removeItem("start");
+      navigate("/login");
+    },
+    onSuccess: () => {
+      toast.success("Your account is activated");
+      queryClient.invalidateQueries(["me"]);
+    },
   });
-  toast.promise(fetch, {
-    id: "logout",
-    loading: "Please wait...",
-    success: "Successfully Logout",
-    error: (err) => console.warn("Fail to logout: ", err),
-  });
-  
-  localStorage.removeItem("open");
-  localStorage.removeItem("start");
-  // queryClient.clear();
 };
