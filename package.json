@@ -66,6 +66,7 @@
     ]
   },
   "devDependencies": {
+    "@azure/static-web-apps-cli": "^1.0.3",
     "@tanstack/react-query-devtools": "^4.2.1"
   }
 }

@@ -1,11 +1,11 @@
+import { loadStripe } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
-import { Form, FloatingLabel } from "react-bootstrap";
+import { FloatingLabel, Form } from "react-bootstrap";
 import { Navigate, useLocation } from "react-router-dom";
 import api, { useAllAddress } from "../../api";
 import Button from "../../components/Button";
 import { OrderForm } from "../Order";
 import { AddressForm } from "../UserAddress";
-import { loadStripe } from "@stripe/stripe-js";
 
 // Hooks
 import useDocumentTitle from "../../hooks/useDocumentTitle";
@@ -15,7 +15,7 @@ export default function Checkout({ title }) {
 
   const { state } = useLocation();
 
-  const { items, total } = state;
+  const { items, total } = state ?? {};
 
   const { data: address, isLoading } = useAllAddress();
   const [select, setSelect] = useState("");
