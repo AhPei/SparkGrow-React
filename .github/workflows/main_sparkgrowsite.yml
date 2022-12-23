@@ -60,4 +60,4 @@ jobs:
           app-name: 'SparkGrowSite'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8ACA58ADC57344C58B6A57BD8A44EF1E }}
-          package: .
+          package: release.zip
