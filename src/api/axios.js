@@ -19,11 +19,12 @@ function getCookie(name) {
 }
 
 const instance = axios.create({
-  // baseURL: process.env.REACT_APP_BASE_URL,
-  baseURL: 'https://sparkgrow.azurewebsites.net/',
+  baseURL: process.env.REACT_APP_BASE_URL,
+  // baseURL: 'https://sparkgrow.azurewebsites.net/',
   withCredentials: true,
   headers: {
     "Content-type": "application/json",
+    "Access-Control-Allow-Origin": "*",
   },
 });
 

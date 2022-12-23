@@ -53,10 +53,12 @@ export const useLogout = () => {
       localStorage.removeItem("open");
       localStorage.removeItem("start");
       navigate("/login");
+      queryClient.clear()
     },
     onSuccess: () => {
-      toast.success("Your account is activated");
+      toast.success("Your account is Logout");
       queryClient.invalidateQueries(["me"]);
     },
+    onSettled: () => {}
   });
 };
