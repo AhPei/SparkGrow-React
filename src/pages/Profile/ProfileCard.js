@@ -6,6 +6,7 @@ import { useDeleteAccount, useLogout, useUpdate } from "../../api";
 // Icon
 import { HiOutlineLogout } from "react-icons/hi";
 import { IoMdReturnLeft, IoMdSettings } from "react-icons/io";
+import Profile from "../../assets/profile.png";
 
 // Components
 import Button from "../../components/Button";
@@ -135,7 +136,6 @@ export default function ProfileCard() {
           feedback={error.current_password}
         />
       </ComfirmModel>
-
       <Card style={{ width: "50%" }} className="py-4 mx-auto">
         <Row>
           <Col className="d-flex justify-content-center mb-3">
@@ -145,6 +145,10 @@ export default function ProfileCard() {
               width="150px"
               height="150px"
               className="cover circle"
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src = Profile;
+              }}
             />
             <Icon />
           </Col>

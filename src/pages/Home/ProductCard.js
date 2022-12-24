@@ -1,5 +1,6 @@
-import { Container, Row, Col, Card, Ratio } from "react-bootstrap";
+import { Card, Col, Container, Ratio, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import NoProductFound from "../../assets/no-product-found.png";
 
 export default function ProductCard({ data }) {
   const navigate = useNavigate();
@@ -34,6 +35,10 @@ export default function ProductCard({ data }) {
                   variant="top"
                   src={image[0]}
                   className="w-100 h-100 cover"
+                  onError={({ currentTarget }) => {
+                    currentTarget.onerror = null; // prevents looping
+                    currentTarget.src = NoProductFound;
+                  }}
                 />
               </Ratio>
               <Card.Header as="h5" className="text-ellipsis" >{name}</Card.Header>

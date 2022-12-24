@@ -17,6 +17,7 @@ import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 // Icon
 import { ImBin } from "react-icons/im";
+import NoProductFound from "../../assets/no-product-found.png";
 import EmptyCart from "./EmptyCart";
 
 export default function Cart({ title }) {
@@ -232,9 +233,13 @@ export default function Cart({ title }) {
                         <Ratio aspectRatio="4x3">
                           <img
                             src={image}
-                            alt={image}
+                            alt="product"
                             className="pointer"
                             onClick={() => navigate(`/products/${name}`)}
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null; // prevents looping
+                              currentTarget.src = NoProductFound;
+                            }}
                           />
                         </Ratio>
                       </Col>

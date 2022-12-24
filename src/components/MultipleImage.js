@@ -3,6 +3,7 @@ import { Carousel } from "react-bootstrap";
 
 // Icon
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import NoProductFound from "../assets/no-product-found.png";
 
 export default function MultipleImage({ images }) {
   const [index, setIndex] = useState(0);
@@ -28,7 +29,11 @@ export default function MultipleImage({ images }) {
             <img
               className="d-block mx-auto w-auto mh-100 cover"
               src={data}
-              alt={data}
+              alt="product"
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src = NoProductFound;
+              }}
             />
           </Carousel.Item>
         ))

@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { delete_cookie } from "../utils/Cookies";
 import api from "./axios";
+
+import { delete_cookie } from "../utils/Cookies";
 
 // ME
 export const useUser = () => {
@@ -16,7 +17,7 @@ export const useLogin = () => {
   const queryClient = useQueryClient();
   return useMutation((body) => api.post(`auth/jwt/create/`, body), {
     onSuccess: async () => {
-      toast.success("Successfully Login!");
+      toast.success("Successfully Login!", { id: "Login" });
       await queryClient.invalidateQueries(["me"]);
     },
   });
@@ -47,18 +48,14 @@ export const useLogout = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   return useMutation(() => api.get("auth/users/logout/"), {
-    onMutate: async () => {
+    onMutate: () => {
       delete_cookie("login_token");
-      await queryClient.setQueryData(["me"], () => null);
-      localStorage.removeItem("open");
-      localStorage.removeItem("start");
-      navigate("/login");
-      queryClient.clear()
+      localStorage.clear()
     },
     onSuccess: () => {
-      toast.success("Your account is Logout");
+      toast.success("Your account is Logout", { id: "Login" });
       queryClient.invalidateQueries(["me"]);
     },
-    onSettled: () => {}
+    onSettled: () => {},
   });
 };

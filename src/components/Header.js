@@ -19,6 +19,7 @@ import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
 
 // Logo
 import Logo from "../assets/logo.png";
+import profileLogo from "../assets/profile.png";
 import shoppingCartLogo from "../assets/shopping-cart.png";
 
 export default function Header({ children }) {
@@ -62,7 +63,7 @@ export default function Header({ children }) {
             style={{ cursor: "pointer" }}
           >
             <img
-              alt="LOGO"
+              alt="logo"
               src={Logo}
               width="30"
               height="30"
@@ -151,6 +152,10 @@ export default function Header({ children }) {
                     width="30"
                     height="30"
                     className="cover round"
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      currentTarget.src = profileLogo;
+                    }}
                   />
                 </Nav.Link>
 
