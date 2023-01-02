@@ -34,7 +34,7 @@ export default function ProfileCard() {
 
   const [error, setError] = useState({});
 
-  const { isLoading, isSuccess, mutate: update } = useUpdate();
+  const { isLoading, mutate: update } = useUpdate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -83,6 +83,7 @@ export default function ProfileCard() {
   const handleDeleteAccount = () => {
     if (!current_password)
       return setError({ current_password: "Please enter your password." });
+    setError(Object.keys(error).filter((data) => data !== "current_password" ))
 
     const onError = (err) => {
       const data = err.response.data;
@@ -92,6 +93,8 @@ export default function ProfileCard() {
 
     deleteAccount({ current_password }, { onError });
   };
+
+  console.log("ERROR", error)
 
   function Icon() {
     if (edit)
@@ -140,8 +143,8 @@ export default function ProfileCard() {
         <Row>
           <Col className="d-flex justify-content-center mb-3">
             <img
-              src={preview}
-              alt="profile"
+              src={preview ?? Profile}
+              alt=""
               width="150px"
               height="150px"
               className="cover circle"
@@ -166,7 +169,7 @@ export default function ProfileCard() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                disabled={!edit || isLoading || isSuccess}
+                disabled={!edit || isLoading}
                 plaintext={!edit}
               />
               <FormField
@@ -195,7 +198,7 @@ export default function ProfileCard() {
                       feedback={error.image}
                       reset={() => setImage(old_image)}
                       onClick={(e) => (e.target.value = "")}
-                      disabled={isLoading || isSuccess}
+                      disabled={isLoading}
                     />
                   </FormField>
                   <FormField>
@@ -209,7 +212,7 @@ export default function ProfileCard() {
                         variant="success"
                         type="submit"
                         onClick={handleSubmit}
-                        disabled={isLoading || isSuccess}
+                        disabled={isLoading}
                       >
                         Save
                       </Button>

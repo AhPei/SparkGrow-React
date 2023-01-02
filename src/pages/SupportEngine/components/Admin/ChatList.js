@@ -1,7 +1,9 @@
 import { Badge, Col, Ratio, Row, Stack } from "react-bootstrap";
+import Profile from "../../../../assets/profile.png";
 
 // Left
 export default function ChatList({ chatList, handleSelect, case_ID }) {
+  console.log("CHATLIST", chatList)
   return (
     <>
       <Stack
@@ -36,7 +38,15 @@ export default function ChatList({ chatList, handleSelect, case_ID }) {
             >
               <Col xs={2} className="pe-0 my-auto">
                 <Ratio aspectRatio="1x1">
-                  <img src={image} alt="User Profile" className="thumbnail" />
+                  <img
+                    src={image ?? Profile}
+                    alt="User Profile"
+                    className="thumbnail"
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      currentTarget.src = Profile;
+                    }}
+                  />
                 </Ratio>
               </Col>
               <Col style={{ fontSize: "max(16px, 0.8vw)" }}>

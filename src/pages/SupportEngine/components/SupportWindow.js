@@ -1,5 +1,5 @@
 // import PropTypes from "prop-types";
-import useWebSocket from "../../../hooks/useWebSocket";
+import useWebSocket from "../hooks/useWebSocket_User";
 import launcherIconActive from "./../assets/close-icon.png";
 import launcherIcon from "./../assets/logo-no-bg.svg";
 import ChatWindow from "./ChatWindow";
@@ -19,7 +19,8 @@ function SupportWindow() {
     socket,
     onSubmit,
     messages,
-    isRefetching: loading,
+    loading,
+    disabled
   } = useWebSocket({ start });
 
   const handleClick = () => {
@@ -66,6 +67,7 @@ function SupportWindow() {
           loading={loading}
           start={start}
           setStart={setStart}
+          disabled={disabled}
         />
       </div>
     </>

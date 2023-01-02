@@ -33,7 +33,7 @@ export default function ProductCard({ data }) {
               <Ratio aspectRatio="4x3">
                 <Card.Img
                   variant="top"
-                  src={image[0]}
+                  src={image[0] ?? NoProductFound}
                   className="w-100 h-100 cover"
                   onError={({ currentTarget }) => {
                     currentTarget.onerror = null; // prevents looping

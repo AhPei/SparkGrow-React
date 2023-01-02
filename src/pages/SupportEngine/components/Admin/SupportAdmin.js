@@ -1,25 +1,29 @@
 import { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap"; 
-import {Loading} from "../../../components"
+import { Col, Container, Row } from "react-bootstrap";
+import { Loading } from "../../../../components";
 
-import useWebSocket from "../../../hooks/useWebSocket";
-import Chat from "./Admin/Chat";
-import ChatList from "./Admin/ChatList";
-import Header from "./Admin/Header";
+import useWebSocket_SupportChat from "../../hooks/useWebSocket_SupportChat";
+import useWebSocket_UserList from "../../hooks/useWebSocket_UserList";
+import Chat from "./Chat";
+import ChatList from "./ChatList";
+import Header from "./Header";
 
 function SupportAdmin() {
-  const { loading: SupportLoading, messages: userList, readMessage } = useWebSocket({ supporter: true });
+  // Left
+  const { loading: SupportLoading, messages: userList, readMessage } = useWebSocket_UserList({ supporter: true });
 
   const [select, setSelect] = useState("");
 
-  console.log("start",!!select)
-
-  const { onSubmit, messages, loading } = useWebSocket({
+  // Right
+  const { onSubmit, messages, loading } = useWebSocket_SupportChat({
     caseID: select.caseID,
     start: !!select,
   });
 
-  useEffect(() => readMessage(select.caseID), [select.caseID, messages]);
+  useEffect(() => {
+    console.log(select.status)
+    readMessage(select.caseID)
+  }, [select.caseID, messages]);
 
   if (SupportLoading) return <Loading />
 

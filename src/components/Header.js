@@ -42,7 +42,6 @@ export default function Header({ children }) {
       const p = prev.filter((data) => data !== name);
       return [name, ...p];
     });
-    // setFilter("");
   };
 
   const { length } = useCartLength();
@@ -69,7 +68,7 @@ export default function Header({ children }) {
               height="30"
               className="d-inline-block align-top mx-2"
             />
-            E-commerce
+            SparkGrow
           </Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Offcanvas
@@ -147,8 +146,8 @@ export default function Header({ children }) {
                 </Nav.Link>
                 <Nav.Link onClick={() => navigate("/profile")} className="mx-2">
                   <img
-                    alt="profile"
-                    src={image}
+                    alt=""
+                    src={image ?? profileLogo}
                     width="30"
                     height="30"
                     className="cover round"
@@ -158,7 +157,6 @@ export default function Header({ children }) {
                     }}
                   />
                 </Nav.Link>
-
                 {/* <Navbar.Text className="mx-2">Signed in as: {name}</Navbar.Text> */}
               </Nav>
             </Offcanvas.Body>

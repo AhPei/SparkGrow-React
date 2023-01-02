@@ -5,6 +5,33 @@
     "node": "16.14.2"
   },
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --passWithNoTests",
+    "serve": "serve -s build",
+    "buildmy": "npm run build && move build\\favicon.ico build\\static\\favicon.ico && if exist \"../SparkGrow-Django/build\" (rmdir /s /q \"../SparkGrow-Django/build\") else (echo \"build directory does not exist\")",
+    "move": "move ./build ../SparkGrow-Django",
+    "deploy": "npm run buildmy && npm run move"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
     "@reduxjs/toolkit": "^1.8.4",
@@ -41,29 +68,6 @@
     "style-loader": "^3.3.1",
     "web-vitals": "^2.1.4",
     "websocket": "^1.0.34"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --passWithNoTests"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "devDependencies": {
     "@azure/static-web-apps-cli": "^1.0.3",

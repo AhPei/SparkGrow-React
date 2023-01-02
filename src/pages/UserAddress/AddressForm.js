@@ -5,23 +5,42 @@ import Button from "../../components/Button";
 import FloatingLabel from "../../components/FloatingLabel";
 import isEmpty from "../../utils/isEmpty";
 
+const stateList = [
+  "Johor", //JHR
+  "Kedah", //KDH
+  "Kelantan", //KTN
+  "Melaka", //MLK
+  "Negeri Sembilan", //NSN
+  "Pahang", //PHG
+  "Penang", //PNG
+  "Perak", //PRK
+  "Perlis", //PLS
+  "Selangor", //SGR
+  "Terengganu", //TRG
+  "Sabah", //SBH
+  "Sarawak", //SWK
+  "Kuala Lumpur", //KUL
+  "Labuan", //LBN
+  "Putrajaya", //PJY
+];
+
 export default function AddressForm({ show, setShow, data }) {
   const {
     id,
     consignee: old_consignee,
-    address: old_address,
-    city: old_city,
-    postcode: old_postcode,
-    country: old_country,
     contact: old_contact,
-  } = data || {};
+    address: old_address,
+    postcode: old_postcode,
+    state: old_state,
+    country: old_country,
+  } = data ?? {};
 
   const [consignee, setConsignee] = useState("");
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
   const [postcode, setPostcode] = useState("");
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("Malaysia");
   const [error, setError] = useState({});
 
   useEffect(() => {
@@ -30,7 +49,7 @@ export default function AddressForm({ show, setShow, data }) {
       setContact(old_contact);
       setAddress(old_address);
       setPostcode(old_postcode);
-      setCity(old_city);
+      setState(old_state);
       setCountry(old_country);
     }
   }, [data]);
@@ -38,24 +57,26 @@ export default function AddressForm({ show, setShow, data }) {
   const { mutate: add } = useAddAddress();
   const { mutate: update } = useUpdateAddress(id);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
     const err = {};
     if (consignee === "") err.consignee = "Required";
     if (contact === "") err.contact = "Required";
     if (address === "") err.address = "Required";
-    if (city === "") err.city = "Required";
+    if (state === "") err.state = "Required";
     if (postcode === "") err.postcode = "Required";
     if (country === "") err.country = "Required";
     if (!isEmpty(err)) return setError(err);
     setError({});
-
+    
     const body = {};
-
+    
     if (consignee !== old_consignee) body.consignee = consignee;
     if (contact !== old_contact) body.contact = contact;
     if (address !== old_address) body.address = address;
     if (postcode !== old_postcode) body.postcode = postcode;
-    if (city !== old_city) body.city = city;
+    if (state !== old_state) body.state = state;
     if (country !== old_country) body.country = country;
 
     const success = () => {
@@ -64,16 +85,17 @@ export default function AddressForm({ show, setShow, data }) {
       setContact("");
       setAddress("");
       setPostcode("");
-      setCity("");
+      setState("");
       setCountry("");
     };
+
+    
 
     if (data) {
       update(body, {
         onSuccess: success,
       });
     } else {
-      console.log(body);
       add(body, {
         onSuccess: success,
       });
@@ -86,7 +108,7 @@ export default function AddressForm({ show, setShow, data }) {
         <Modal.Title>{data ? "Edit" : "Add"} Address</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form noValidate onSubmit={handleSubmit}>
           <Row>
             <Col>
               <FloatingLabel
@@ -135,24 +157,40 @@ export default function AddressForm({ show, setShow, data }) {
           </Row>
           <Row>
             <Col>
-              <FloatingLabel
+              {/* <FloatingLabel
                 floating
-                label="City"
-                value={city}
-                onChange={setCity}
-                feedback={error.city}
-                reset={data && (() => setCity(old_city))}
-              />
+                label="State"
+                value={state}
+                onChange={setState}
+                feedback={error.state}
+                reset={data && (() => setState(old_state))}
+              /> */}
+              <Form.Select value={old_state ?? state} onChange={(e)=>setState(e.target.value)} isInvalid={error.state}>
+                <option value="">
+                  State
+                </option>
+                {stateList?.sort().map((state, idx) => (
+                  <option
+                    key={idx}
+                    value={state}
+                    style={{ textTransform: "capitalize" }}
+                  >
+                    {state}
+                  </option>
+                ))}
+              </Form.Select>
             </Col>
 
             <Col>
               <FloatingLabel
                 floating
                 label="Country"
+                // disabled
+                readOnly
                 value={country}
                 onChange={setCountry}
-                feedback={error.consignee}
-                reset={data && (() => setCountry(old_country))}
+                feedback={error.country}
+                // reset={data && (() => setCountry(old_country))}
               />
             </Col>
           </Row>
@@ -161,7 +199,7 @@ export default function AddressForm({ show, setShow, data }) {
               <Button variant="secondary" onClick={() => setShow(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleSubmit}>Save</Button>
+              <Button type="submit">Save</Button>
             </Col>
           </Row>
         </Form>

@@ -43,7 +43,7 @@ export default function Address() {
                   {data.consignee} | {data.contact}
                 </Card.Title>
                 <p>
-                  {data.address}, {data.city}, {data.postcode}, {data.country}.
+                  {data.address}, {data.state}, {data.postcode}, {data.country}.
                 </p>
               </Col>
               <Col className="text-right" md={4}>

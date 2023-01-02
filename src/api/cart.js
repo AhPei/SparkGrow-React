@@ -1,11 +1,12 @@
 import {
   useInfiniteQuery,
-  useMutation,
   useQuery,
   useQueryClient
 } from "@tanstack/react-query";
 import useSyncLocalStorage from "../hooks/useSyncLocalStorage";
 import api from "./axios";
+import useMutation from "./useMutation";
+
 
 // Cart Length
 export const useCartLength = () => {
@@ -88,9 +89,6 @@ export const useUpdateCart = () => {
           })),
         }));
       },
-      // HERE
-      // onSuccess: (result, variables, context) =>
-      //   queryClient.invalidateQueries(["cart", uid]),
     }
   );
 };

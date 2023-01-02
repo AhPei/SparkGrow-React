@@ -1,7 +1,7 @@
 // import PropTypes from "prop-types";
+import Header from "./Header";
 import MessageList from "./MessageList";
 import UserInput from "./UserInput";
-import Header from "./Header";
 
 function ChatWindow({
   agentProfile,
@@ -11,6 +11,7 @@ function ChatWindow({
   loading,
   start,
   setStart,
+  disabled
 }) {
   
   if (!start) {
@@ -39,7 +40,7 @@ function ChatWindow({
         onClose={onClose}
       />
       <MessageList messages={messages} imageUrl={agentProfile.imageUrl} />
-      <UserInput onSubmit={onSubmit} />
+      <UserInput onSubmit={onSubmit} disabled={disabled} />
     </>
   );
 }

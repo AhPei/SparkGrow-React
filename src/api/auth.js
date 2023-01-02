@@ -1,9 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Cookies from "js-cookie";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import api from "./axios";
-
-import { delete_cookie } from "../utils/Cookies";
 
 // ME
 export const useUser = () => {
@@ -20,6 +18,8 @@ export const useLogin = () => {
       toast.success("Successfully Login!", { id: "Login" });
       await queryClient.invalidateQueries(["me"]);
     },
+    onError: (err) =>
+      toast.error(err.response.data.detail, { id: "Login" }),
   });
 };
 
@@ -46,11 +46,10 @@ export const useActivation = () => {
 // Logout
 export const useLogout = () => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   return useMutation(() => api.get("auth/users/logout/"), {
     onMutate: () => {
-      delete_cookie("login_token");
-      localStorage.clear()
+      Cookies.remove("login_token");
+      localStorage.clear();
     },
     onSuccess: () => {
       toast.success("Your account is Logout", { id: "Login" });

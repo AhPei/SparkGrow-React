@@ -30,11 +30,11 @@ const SendResetPassword = lazy(() =>
   import("./pages/ResetPassword/SendResetPassword")
 );
 const SupportAdmin = lazy(() =>
-  import("./pages/SupportEngine/components/SupportAdmin")
+  import("./pages/SupportEngine/components/Admin/SupportAdmin")
 );
 
-// // Fun
-// import PlayGround from "./Playground/PlayGround";
+// Fun
+import PlayGround from "./Playground/PlayGround";
 
 import Loading from "./components/Loading";
 
@@ -64,7 +64,7 @@ function App() {
             />
             <Route path="/checkout" element={<Checkout title="Checkout" />} />
             <Route path="/order/:id" element={<Order title="Order" />} />
-            <Route path="/supporter" element={<SupportAdmin />} />
+            <Route path="/support" element={<SupportAdmin />} />
           </Route>
           <Route path="/" element={<Unauthorized success={success} />}>
             <Route path="/login" element={<Login title="Login" />} />
@@ -92,7 +92,7 @@ function App() {
           />
           <Route path="/payment/canceled" element={<Payment_Failed />} />
           <Route path="*" element={<NotFound title="404|Not Found" />} />
-          {/* <Route path="/playground" element={<PlayGround title="Playground" />} /> */}
+          <Route path="/playground" element={<PlayGround title="Playground" />} />
         </Routes>
       </Suspense>
     </Router>

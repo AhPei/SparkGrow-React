@@ -20,9 +20,17 @@ export default function useWebSocket({ caseID, supporter, start = true }) {
   useEffect(() => {
     if (!start) return;
     setMessages([]);
-    const host = "ws://127.0.0.1:8000/ws/chat/";
+    const protocol = window.location.protocol;
+    const origin = process.env.REACT_APP_ORIGIN;
+
+    let wsStart = "ws://";
+    if (protocol == "https:") wsStart = "wss://";
+
+    const host = wsStart + origin + "/ws/chat/";
+
     let link = host + (caseID ? `${caseID}/` : "");
     if (supporter) link = host + "support/";
+
     const ws = new W3CWebSocket(link);
     socket.current = ws;
 
@@ -53,15 +61,15 @@ export default function useWebSocket({ caseID, supporter, start = true }) {
         ? toast(
             (t) => (
               <span>
-                {err} 
-                <button onClick={()=>handleRetry(t)}>Retry</button>
-                <button onClick={()=>toast.dismiss(t.id)}>X</button>
+                {err}
+                <button onClick={() => handleRetry(t)}>Retry</button>
+                <button onClick={() => toast.dismiss(t.id)}>X</button>
               </span>
             ),
             { duration: Infinity }
           )
         : setMessages((prev) => [...prev, { content: err }]);
-      setLoading(false)
+      setLoading(false);
     };
     ws.onerror = (e) => {
       console.log("Something went wrong on socket>", e);
@@ -91,8 +99,8 @@ export default function useWebSocket({ caseID, supporter, start = true }) {
                 ? {
                     ...obj,
                     ...data,
-                    newMessage: obj.newMessage + 1 || 1,
-                    status: data.status || obj.status,
+                    newMessage: obj.newMessage + 1 ?? 1,
+                    status: data.status ?? obj.status,
                   }
                 : obj
             )
@@ -126,9 +134,9 @@ export default function useWebSocket({ caseID, supporter, start = true }) {
   };
 
   const handleRetry = (t) => {
-    toast.dismiss(t.id)
+    toast.dismiss(t.id);
     setRetry((prev) => !prev);
-    setLoading(true)
+    setLoading(true);
   };
 
   const readMessage = (caseID) => {

@@ -16,6 +16,7 @@ import useDidUpdateEffect from "../../hooks/useDidUpdateEffect";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 // Icon
+import { toast } from "react-hot-toast";
 import { ImBin } from "react-icons/im";
 import NoProductFound from "../../assets/no-product-found.png";
 import EmptyCart from "./EmptyCart";
@@ -145,6 +146,8 @@ export default function Cart({ title }) {
 
   // Handle checkout
   const checkout = () => {
+    if (subtotal<2) return toast.error("Must be over RM 2")
+
     const items = cart.filter((data) => selectedList.includes(data.id));
     let sub = 0;
     items.map(({ unitprice, quantity }) => (sub += unitprice * quantity));
@@ -153,7 +156,7 @@ export default function Cart({ title }) {
     navigate("/checkout", { state: { items, total: sub } });
   };
 
-  if (isLoading) return <Loading />;
+  if (isLoading || !isSuccess) return <Loading />;
 
   if (cart?.length === 0) return <EmptyCart />;
 
@@ -232,7 +235,7 @@ export default function Cart({ title }) {
                       <Col>
                         <Ratio aspectRatio="4x3">
                           <img
-                            src={image}
+                            src={image ?? NoProductFound}
                             alt="product"
                             className="pointer"
                             onClick={() => navigate(`/products/${name}`)}

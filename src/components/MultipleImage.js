@@ -28,8 +28,8 @@ export default function MultipleImage({ images }) {
           <Carousel.Item key={idx}>
             <img
               className="d-block mx-auto w-auto mh-100 cover"
-              src={data}
-              alt="product"
+              src={data ?? NoProductFound}
+              alt=""
               onError={({ currentTarget }) => {
                 currentTarget.onerror = null; // prevents looping
                 currentTarget.src = NoProductFound;

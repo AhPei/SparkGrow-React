@@ -71,7 +71,7 @@ export default function Checkout({ title }) {
                 consignee,
                 contact,
                 address,
-                city,
+                state,
                 postcode,
                 country,
               }) => (
@@ -81,7 +81,7 @@ export default function Checkout({ title }) {
                   style={{ whiteSpace: "pre-line" }}
                   defaultValue={id}
                 >
-                  {consignee} | {contact} {address}, {city}, {postcode},{" "}
+                  {consignee} | {contact} {address}, {state}, {postcode},{" "}
                   {country}.
                 </option>
               )

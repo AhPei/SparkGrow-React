@@ -5,7 +5,6 @@ import { useLogin } from "../../api";
 import Button from "../../components/Button";
 import FloatingLabel from "../../components/FloatingLabel";
 
-
 // Hooks
 import toast from "react-hot-toast";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
@@ -13,7 +12,7 @@ import useDocumentTitle from "../../hooks/useDocumentTitle";
 export default function Loginpage({ title }) {
   useDocumentTitle(title);
 
-  const [email, setEmail] = useState("gohpeisheng@gmail.com");
+  const [email, setEmail] = useState("gohpeisheng20@gmail.com");
   const [password, setPassword] = useState("001019");
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
@@ -31,7 +30,7 @@ export default function Loginpage({ title }) {
       return toast.error("Please enter valid email");
     if (!email || !password) return toast.error("Please fill up all field");
 
-    login({ email, password });
+    login({ email, password }, { onError: () => setPassword("") });
   };
 
   return (

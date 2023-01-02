@@ -18,6 +18,11 @@ import { useInView } from "react-intersection-observer";
 import useDebounce from "../../hooks/useDebounce";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 
+const filterList = [
+  "lowest",
+  "highest",
+]
+
 export default function Home({ title }) {
   // Infinity Scroll
   const { ref, inView } = useInView();
@@ -27,8 +32,9 @@ export default function Home({ title }) {
   }, [inView]);
 
   const [filter, setFilter] = useState("");
-  const debounce = useDebounce(filter, 1000);
-  const [pid, setPid] = useState("");
+  const debounce = useDebounce(filter, 500);
+  const [categorySearch, setCategorySearch] = useState("");
+  const [filterSearch, setFilterSearch] = useState("");
 
   const {
     isLoading: productLoading,
@@ -41,10 +47,9 @@ export default function Home({ title }) {
     isFetching,
     isFetchingNextPage,
   } = useProducts();
-  const { data: category, isLoading: categoryLoading } = useProductCategory();
+  const { data: categoryList, isLoading: categoryLoading } = useProductCategory();
   const { data: search, isFetching: fetchingSearch } = useSearch(debounce);
-  const { data: categoryResult, isFetching: fetchingCategory } =
-    useSearchCategory(pid);
+  const { data: categoryResult, isFetching: fetchingCategory } = useSearchCategory(categorySearch);
   useDocumentTitle(title, isSuccess);
 
   if (isError) return <span>Error: {error.message}</span>;
@@ -52,11 +57,11 @@ export default function Home({ title }) {
   const Product = () => {
     if (productLoading || categoryLoading || fetchingSearch || fetchingCategory)
       return <Loading color="green" />;
-    if (categoryResult) return <ProductCard data={categoryResult} />;
-    if (search && search.length > 0) return <ProductCard data={search} />;
-    if (search && search.length === 0 && debounce)
-      return <ProductCard data={[]} />;
-    return <ProductCard data={product.pages} />;
+
+    let data = search || categoryResult || product?.pages // pages is the rest
+    if (filterSearch.toLowerCase() === "lowest") data = data.sort((a, b) => a.unitprice - b.unitprice) // Ascending 
+    else if (filterSearch.toLowerCase() === "highest") data = data.sort((a, b) => b.unitprice - a.unitprice) // Descending
+    return <ProductCard data={data} />;
   };
 
   return (
@@ -80,15 +85,31 @@ export default function Home({ title }) {
           </Col>
           <Col>
             <FloatingLabel label="Category" style={{ minWidth: "100px" }}>
-              <Form.Select value={pid} onChange={(e) => setPid(e.target.value)}>
+              <Form.Select value={categorySearch} onChange={(e) => setCategorySearch(e.target.value)}>
                 <option value="">All</option>
-                {category?.map(({ id, name }) => (
+                {categoryList?.map(({ id, name }) => (
                   <option
                     key={id}
                     value={id}
                     style={{ textTransform: "capitalize" }}
                   >
                     {name}
+                  </option>
+                ))}
+              </Form.Select>
+            </FloatingLabel>
+          </Col>
+          <Col>
+            <FloatingLabel label="Sort By" style={{ minWidth: "100px" }}>
+              <Form.Select value={filterSearch} onChange={(e) => setFilterSearch(e.target.value)}>
+                <option value="">All</option>
+                {filterList?.map((value,idx) => (
+                  <option
+                    key={idx}
+                    value={value}
+                    style={{ textTransform: "capitalize" }}
+                  >
+                    {value}
                   </option>
                 ))}
               </Form.Select>

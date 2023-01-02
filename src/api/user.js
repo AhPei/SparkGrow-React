@@ -1,7 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useLogout } from "./auth";
 import api from "./axios";
+import useMutation from "./useMutation";
 
 // Change Password
 export const useChangePassword = () => {
@@ -54,8 +55,12 @@ export const useUpdate = () => {
     },
     onSuccess: (results, variables, context) => {
       toast.success("Updated", { id: context });
-      queryClient.invalidateQueries(["me"]);
+      queryClient.refetchQueries(["me"]);
+      return context
     },
+    onSettle: (context) => {
+      toast.dismiss(context)
+    }
   });
 };
 

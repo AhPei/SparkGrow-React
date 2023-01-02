@@ -1,4 +1,5 @@
 import { Badge, Col, Row } from "react-bootstrap";
+import Profile from "../../../../assets/profile.png";
 
 export default function Header({ caseID, username, image, status }) {
   return (
@@ -9,12 +10,16 @@ export default function Header({ caseID, username, image, status }) {
             {/* <Ratio aspectRatio="1x1"> */}
             <img
               title="Profile Image"
-              src={image}
-              alt="Profile"
+              src={image ?? profile}
+              alt=""
               // width="60px"
               // height="60px"
               className="d-inline-block align-top round thumbnail"
               style={{ width: "60px", height: "60px" }}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src = Profile;
+              }}
             />
             {/* </Ratio> */}
             <div

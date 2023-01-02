@@ -1,11 +1,3 @@
-import ReactDOM from "react-dom/client";
-import toast, { Toaster } from "react-hot-toast";
-import App from "./App";
-
-// utils
-// import "./utils/currency";
-
-// React Query
 import {
   MutationCache,
   QueryCache,
@@ -13,6 +5,9 @@ import {
   QueryClientProvider
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ReactDOM from "react-dom/client";
+import toast, { Toaster } from "react-hot-toast";
+import App from "./App";
 
 // Importing the Bootstrap CSS
 // import "mdb-react-ui-kit/dist/css/mdb.min.css";
@@ -44,35 +39,43 @@ const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     onError: async (error, query) => {
-      // 🎉 only show error toasts if we already have data in the cache
-      // which indicates a failed background update
+      const { status } = error.response;
+      const key = query.queryKey[0];
+
       if (isNetworkError(error))
-        return toast.error(`${error.message}`, {
+        return toast.error(`${error.message} - Please check your network.`, {
           id: "Network_Error",
         });
-      if (query.queryKey[0] !== "me") {
-        try {
-          await queryClient.invalidateQueries(["me"]);
-          queryClient.refetchQueries([query.queryKey[0]]);
-          console.log("Refreshed");
-        } catch {}
+
+      // Only refetch when user Unauthorized
+      if (key !== "me" && status === 401) {
+        await queryClient.invalidateQueries(["me"]);
+        queryClient.refetchQueries([key]);
+      }
+      // 🎉 only show error toasts if we already have data in the cache
+      // which indicates a failed background update
+      if (status !== 401) {
+        toast.error(`Something went wrong: ${error.message}`, {id:"failedOnCache"});
       }
     },
   }),
   mutationCache: new MutationCache({
     onError: async (error, variables, context, mutation) => {
-      const { status, data } = error.response;
+      console.log(error);
+      const { status, data } = error?.response;
       const { retry, onSuccess, mutationFn } = mutation.options;
 
-      if (data?.detail) {
-        await queryClient.invalidateQueries(["me"]);
-        // Refetch mutate after get new token
-        return await mutationFn(variables)
-          .then(() => onSuccess())
-          .catch((err) => toast.error(err.response.data.detail, {
-            id: "failInOnCache",
-          }));
-      }
+      // if (status === 401) {
+      //   await queryClient.invalidateQueries(["me"]);
+      //   // Refetch mutate after get new token
+      //   return await mutationFn(variables)
+      //     .then(() => onSuccess())
+      //     .catch((err) =>
+      //       toast.error(err.response.data.detail, {
+      //         id: "failOnCache",
+      //       })
+      //     );
+      // }
 
       // 🎉 only show error toasts if we already have data in the cache
       // which indicates a failed background update
@@ -83,10 +86,8 @@ const queryClient = new QueryClient({
         });
         return toast.dismiss(context);
       }
-
-      toast.error(data.detail, {
-        id: "errorOnCache",
-      });
+      if (status !== 401)
+        return toast.error(Object.values(data), { id: "errorOnCache" });
     },
   }),
 });
