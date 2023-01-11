@@ -17,7 +17,7 @@ import "./index.css";
 import "./App.css";
 
 // Bootstrap Bundle JS
-import "bootstrap/dist/js/bootstrap.bundle.min";
+// import "bootstrap/dist/js/bootstrap.bundle.min";
 
 function isNetworkError(err) {
   // return !!err.isAxiosError && err.code == "ERR_NETWORK";
@@ -39,55 +39,42 @@ const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     onError: async (error, query) => {
-      const { status } = error.response;
-      const key = query.queryKey[0];
-
+      // console.log("Query Error", error?.response?.data);
       if (isNetworkError(error))
         return toast.error(`${error.message} - Please check your network.`, {
           id: "Network_Error",
         });
 
-      // Only refetch when user Unauthorized
-      if (key !== "me" && status === 401) {
-        await queryClient.invalidateQueries(["me"]);
-        queryClient.refetchQueries([key]);
-      }
       // 🎉 only show error toasts if we already have data in the cache
       // which indicates a failed background update
-      if (status !== 401) {
-        toast.error(`Something went wrong: ${error.message}`, {id:"failedOnCache"});
+      if (error?.response?.status !== 401) {
+        toast.error(`Something went wrong: ${error.message}`, {
+          id: "failedOnCache",
+        });
       }
     },
   }),
   mutationCache: new MutationCache({
     onError: async (error, variables, context, mutation) => {
-      console.log(error);
+      console.log("Mutation Error", error);
       const { status, data } = error?.response;
-      const { retry, onSuccess, mutationFn } = mutation.options;
-
-      // if (status === 401) {
-      //   await queryClient.invalidateQueries(["me"]);
-      //   // Refetch mutate after get new token
-      //   return await mutationFn(variables)
-      //     .then(() => onSuccess())
-      //     .catch((err) =>
-      //       toast.error(err.response.data.detail, {
-      //         id: "failOnCache",
-      //       })
-      //     );
-      // }
 
       // 🎉 only show error toasts if we already have data in the cache
       // which indicates a failed background update
       // Network Error
-      if (status >= 500 || status == 0) {
+      if (status >= 500 || status === 0) {
         toast.error(`Mutation Cache: ${error.message}`, {
           id: "Mutation_Error",
         });
         return toast.dismiss(context);
       }
-      if (status !== 401)
-        return toast.error(Object.values(data), { id: "errorOnCache" });
+
+      if (status !== 401) {
+        return toast.error(
+          typeof data === "object" ? Object.values(data) : data,
+          { id: "errorOnCache" }
+        );
+      }
     },
   }),
 });

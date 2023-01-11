@@ -1,9 +1,9 @@
-import { useNavigate, useParams } from "react-router-dom";
-import Button from "../../components/Button";
-import { useActivation } from "../../api";
 import { useEffect } from "react";
-import Loading from "../../components/Loading";
 import { Card, Container } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import { useActivation } from "../../api";
+import Button from "../../components/Button";
+import Loading from "../../components/Loading";
 
 export default function Activate() {
   const param = useParams();
@@ -32,7 +32,6 @@ export default function Activate() {
 
   const Response = () => {
     if (isError) {
-      console.log(error, error.code)
       if (error.code === "ERR_NETWORK")
       return (
         <>

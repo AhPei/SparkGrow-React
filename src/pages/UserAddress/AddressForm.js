@@ -54,12 +54,12 @@ export default function AddressForm({ show, setShow, data }) {
     }
   }, [data]);
 
-  const { mutate: add } = useAddAddress();
-  const { mutate: update } = useUpdateAddress(id);
+  const { mutate: add, isLoading: addLoading } = useAddAddress();
+  const { mutate: update, isLoading: updateLoading } = useUpdateAddress(id);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     const err = {};
     if (consignee === "") err.consignee = "Required";
     if (contact === "") err.contact = "Required";
@@ -69,9 +69,9 @@ export default function AddressForm({ show, setShow, data }) {
     if (country === "") err.country = "Required";
     if (!isEmpty(err)) return setError(err);
     setError({});
-    
+
     const body = {};
-    
+
     if (consignee !== old_consignee) body.consignee = consignee;
     if (contact !== old_contact) body.contact = contact;
     if (address !== old_address) body.address = address;
@@ -86,10 +86,7 @@ export default function AddressForm({ show, setShow, data }) {
       setAddress("");
       setPostcode("");
       setState("");
-      setCountry("");
     };
-
-    
 
     if (data) {
       update(body, {
@@ -103,7 +100,12 @@ export default function AddressForm({ show, setShow, data }) {
   };
 
   return (
-    <Modal show={show} onHide={() => setShow(false)} centered backdrop={true}>
+    <Modal
+      show={show}
+      onHide={() => setShow(false)}
+      centered
+      backdrop={addLoading || updateLoading ? "static" : true}
+    >
       <Modal.Header closeButton>
         <Modal.Title>{data ? "Edit" : "Add"} Address</Modal.Title>
       </Modal.Header>
@@ -118,6 +120,7 @@ export default function AddressForm({ show, setShow, data }) {
                 onChange={setConsignee}
                 feedback={error.consignee}
                 reset={data && (() => setConsignee(old_consignee))}
+                disabled={addLoading || updateLoading}
               />
             </Col>
             <Col>
@@ -128,6 +131,7 @@ export default function AddressForm({ show, setShow, data }) {
                 onChange={setContact}
                 feedback={error.contact}
                 reset={data && (() => setContact(old_contact))}
+                disabled={addLoading || updateLoading}
               />
             </Col>
           </Row>
@@ -140,6 +144,7 @@ export default function AddressForm({ show, setShow, data }) {
                 onChange={setAddress}
                 feedback={error.address}
                 reset={data && (() => setAddress(old_address))}
+                disabled={addLoading || updateLoading}
               />
             </Col>
           </Row>
@@ -152,6 +157,7 @@ export default function AddressForm({ show, setShow, data }) {
                 onChange={setPostcode}
                 feedback={error.postcode}
                 reset={data && (() => setPostcode(old_postcode))}
+                disabled={addLoading || updateLoading}
               />
             </Col>
           </Row>
@@ -165,10 +171,13 @@ export default function AddressForm({ show, setShow, data }) {
                 feedback={error.state}
                 reset={data && (() => setState(old_state))}
               /> */}
-              <Form.Select value={old_state ?? state} onChange={(e)=>setState(e.target.value)} isInvalid={error.state}>
-                <option value="">
-                  State
-                </option>
+              <Form.Select
+                value={old_state ?? state}
+                onChange={(e) => setState(e.target.value)}
+                isInvalid={error.state}
+                disabled={addLoading || updateLoading}
+              >
+                <option value="">State</option>
                 {stateList?.sort().map((state, idx) => (
                   <option
                     key={idx}
@@ -185,21 +194,27 @@ export default function AddressForm({ show, setShow, data }) {
               <FloatingLabel
                 floating
                 label="Country"
-                // disabled
                 readOnly
                 value={country}
                 onChange={setCountry}
                 feedback={error.country}
+                disabled={addLoading || updateLoading}
                 // reset={data && (() => setCountry(old_country))}
               />
             </Col>
           </Row>
           <Row>
             <Col className="d-flex justify-content-end gap-3">
-              <Button variant="secondary" onClick={() => setShow(false)}>
+              <Button
+                variant="secondary"
+                onClick={() => setShow(false)}
+                disabled={addLoading || updateLoading}
+              >
                 Cancel
               </Button>
-              <Button type="submit">Save</Button>
+              <Button type="submit" loading={addLoading || updateLoading}>
+                Save
+              </Button>
             </Col>
           </Row>
         </Form>

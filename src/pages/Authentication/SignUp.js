@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Container, Row, Col, Form, Card } from "react-bootstrap";
+import { Card, Col, Container, Form, Row } from "react-bootstrap";
 
 // Components
 import Button from "../../components/Button";
 import FloatingLabel from "../../components/FloatingLabel";
 
+import { Link, useNavigate } from "react-router-dom";
 import { useRegister } from "../../api";
-import { useNavigate, Link } from "react-router-dom";
 
 // Hooks
 import useDocumentTitle from "../../hooks/useDocumentTitle";
@@ -26,11 +26,9 @@ export default function SignUp({ title }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const error = (err) => setError(err.response.data);
-
     const body = { username, email, password, re_password: repassword };
     register(body, {
-      onError: error,
+      onError: (err) => setError(err.response.data),
       onSuccess: () => setTimeout(() => navigate("/"), 3000),
     });
   };

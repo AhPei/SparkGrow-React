@@ -11,16 +11,14 @@ export default function Orders() {
 
   if (isLoading) return <Loading />;
 
-  console.log(orders)
-
   return (
     <Table
       striped
       bordered
       hover
       variant="dark"
-      style={{ width: "50%" }}
       className="mx-auto text-center mt-3"
+      responsive
     >
       <thead>
         <tr>
@@ -36,7 +34,7 @@ export default function Orders() {
           <tr key={idx} onClick={() => navigate(`/order/${id}`)}>
             <td>{id}</td>
             <td>{products.length}</td>
-            <td>RM {total}</td>
+            <td>RM {total.toFixed(2)}</td>
             <td>{created_at}</td>
           </tr>
         ))}

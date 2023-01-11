@@ -23,6 +23,7 @@ import EmptyCart from "./EmptyCart";
 
 export default function Cart({ title }) {
   const [selectedList, setSelectedList] = useState([]);
+  const [selectedSingle, setSelectedSingle] = useState("");
   const [show, setShow] = useState(false);
   const [subtotal, setSubtotal] = useState(null);
   const preValue = useRef(null);
@@ -30,9 +31,9 @@ export default function Cart({ title }) {
   // Mutations
   const queryClient = useQueryClient();
 
-  const { isLoading, data: cart, isSuccess } = useCart();
-  const { mutate: removeCart } = useRemoveCart();
-  const { mutate: updateCart } = useUpdateCart();
+  const { isLoading: cartLoading, data: cart, isSuccess } = useCart();
+  const { mutate: removeCart, isLoading: removeLoading } = useRemoveCart();
+  const { mutate: updateCart, isLoading: updateLoading } = useUpdateCart();
 
   useDocumentTitle(title, isSuccess);
 
@@ -69,8 +70,8 @@ export default function Cart({ title }) {
   // Remove
   const remove = () => {
     setShow(false);
-    removeCart(selectedList);
-    setSelectedList([]);
+    removeCart([selectedSingle]);
+    setSelectedSingle("");
   };
 
   // Show Comfirm Model
@@ -146,7 +147,7 @@ export default function Cart({ title }) {
 
   // Handle checkout
   const checkout = () => {
-    if (subtotal<2) return toast.error("Must be over RM 2")
+    if (subtotal < 2) return toast.error("Must be over RM 2");
 
     const items = cart.filter((data) => selectedList.includes(data.id));
     let sub = 0;
@@ -156,7 +157,7 @@ export default function Cart({ title }) {
     navigate("/checkout", { state: { items, total: sub } });
   };
 
-  if (isLoading || !isSuccess) return <Loading />;
+  if ((cartLoading || !isSuccess) && !cart) return <Loading />;
 
   if (cart?.length === 0) return <EmptyCart />;
 
@@ -172,46 +173,50 @@ export default function Cart({ title }) {
         setShow={setShow}
         cancel
       />
-      <Container className="d-flex justify-content-between">
-        <Row className="mb-2">
+      <Container
+      // className="d-flex justify-content-between"
+      // style={{ backgroundColor: "red" }}
+      >
+        <Row className="d-flex justify-content-between">
           <Col>
-            <Form.Check
-              inline
-              id="select all"
-              label="Select All"
-              name="group1"
-              type="checkbox"
-              onClick={selectAll}
-            />
-            {selectedList.length > 0 && (
-              <Button variant="danger" onClick={handleShow}>
-                Remove
-              </Button>
-            )}
-          </Col>
-        </Row>
-        {selectedList.length > 0 && (
-          <Row>
-            <Col>
-              <h4 className="text-truncate">{"RM " + subtotal}</h4>
-            </Col>
-            <Col>
-              <Button variant="primary" onClick={checkout}>
-                CheckOut
-              </Button>
-            </Col>
-          </Row>
-        )}
-      </Container>
-      <Container>
-        {cart?.map(
-          ({ id, name, desc, stock, image, unitprice, quantity }, idx) => (
-            <Row className="mb-4" key={idx}>
-              <Col>
-                <Card className={`${stock <= 0 && "unavailable"} mx-auto`}>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <Form.Check
+                  inline
+                  id="select all"
+                  label="Select All"
+                  name="group1"
+                  type="checkbox"
+                  onClick={selectAll}
+                />
+                {selectedList.length > 0 && (
+                  <Button
+                    variant="danger"
+                    onClick={handleShow}
+                    loading={removeLoading}
+                  >
+                    Remove
+                  </Button>
+                )}
+              </div>
+              {selectedList.length > 0 && (
+                <div className="d-flex align-items-center">
+                  <h4 className="text-truncate d-inline">{"RM " + subtotal}</h4>
+                  <Button variant="primary ms-2" onClick={checkout}>
+                    CheckOut
+                  </Button>
+                </div>
+              )}
+            </div>
+            {cart?.map(
+              ({ id, name, desc, stock, image, unitprice, quantity }, idx) => (
+                <Card
+                  className={`${stock <= 0 && "unavailable"} mx-auto mb-3`}
+                  key={idx}
+                >
                   <Card.Body>
-                    <Row className="d-flex align-items-center">
-                      <Col sm={1} className="d-flex justify-content-center">
+                    <Row className="text-center d-flex justify-content-betweeen align-items-center">
+                      <Col sm={1} className="p-0">
                         {stock > 0 && quantity <= stock ? (
                           <Form.Check
                             inline
@@ -223,16 +228,26 @@ export default function Cart({ title }) {
                             value={id}
                           />
                         ) : stock > 0 ? (
-                          <MDBBadge color="dark" notification pill>
+                          <MDBBadge
+                            color="dark"
+                            notification
+                            pill
+                            className="d-block"
+                          >
                             Over Quantity
                           </MDBBadge>
                         ) : (
-                          <MDBBadge color="dark" notification pill>
+                          <MDBBadge
+                            color="dark"
+                            notification
+                            pill
+                            className="d-block"
+                          >
                             Sold Out
                           </MDBBadge>
                         )}
                       </Col>
-                      <Col>
+                      <Col sm={2} className="p-0">
                         <Ratio aspectRatio="4x3">
                           <img
                             src={image ?? NoProductFound}
@@ -246,26 +261,25 @@ export default function Cart({ title }) {
                           />
                         </Ratio>
                       </Col>
-                      <Col className="d-flex justify-content-center">
+                      <Col sm={3} md={2} className="p-0 text-start">
                         <Card.Title>{name}</Card.Title>
-                      </Col>
-                      <Col>
                         <Card.Subtitle
+                          className="d-none d-md-block"
                           style={{
                             textOverflow: "ellipsis",
                             overflow: "hidden",
                             // whiteSpace: "nowrap",
-                            maxHeight: "100px",
-                            lineHeight: "20px",
+                            lineHeight: "1.5em",
+                            height: "3em", // lineHeight * 2 = height
                           }}
                         >
                           {desc}
                         </Card.Subtitle>
                       </Col>
-                      <Col className="d-flex justify-content-center">
+                      <Col sm={2} className="d-flex justify-content-center">
                         RM{unitprice.toFixed(2)}
                       </Col>
-                      <Col className="d-flex justify-content-center">
+                      <Col sm={3} md={2} className="d-flex">
                         <Button
                           size="sm"
                           name="decrease"
@@ -276,8 +290,9 @@ export default function Cart({ title }) {
                           -
                         </Button>
                         <Form.Control
-                          style={{ width: "3.5rem" }}
-                          className="text-center mx-2"
+                          size="sm"
+                          // style={{ width: "1.5rem" }}
+                          className="text-center"
                           type="number"
                           name="quantity"
                           placeholder="Qty"
@@ -299,15 +314,19 @@ export default function Cart({ title }) {
                           +
                         </Button>
                       </Col>
-                      <Col className="d-flex justify-content-center">
+                      <Col
+                        sm={2}
+                        className="d-none d-md-flex justify-content-center"
+                      >
                         RM{(unitprice * quantity).toFixed(2)}
                       </Col>
-                      <Col md={1}>
+                      <Col sm={1}>
                         <ImBin
+                          className="pointer"
                           size="1.5rem"
                           color="red"
                           onClick={() => {
-                            setSelectedList([id]);
+                            setSelectedSingle(id);
                             handleShow();
                           }}
                         />
@@ -315,10 +334,10 @@ export default function Cart({ title }) {
                     </Row>
                   </Card.Body>
                 </Card>
-              </Col>
-            </Row>
-          )
-        )}
+              )
+            )}
+          </Col>
+        </Row>
       </Container>
     </>
   );

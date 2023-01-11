@@ -1,8 +1,7 @@
-import { loadStripe } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
 import { FloatingLabel, Form } from "react-bootstrap";
 import { Navigate, useLocation } from "react-router-dom";
-import api, { useAllAddress } from "../../api";
+import { useAllAddress, useCheckout } from "../../api";
 import Button from "../../components/Button";
 import { OrderForm } from "../Order";
 import { AddressForm } from "../UserAddress";
@@ -17,7 +16,8 @@ export default function Checkout({ title }) {
 
   const { items, total } = state ?? {};
 
-  const { data: address, isLoading } = useAllAddress();
+  const { data: address, isLoading: addressLoading } = useAllAddress();
+  const { mutate: checkout, isLoading: checkoutLoading } = useCheckout();
   const [select, setSelect] = useState("");
   const [show, setShow] = useState(false);
 
@@ -40,18 +40,7 @@ export default function Checkout({ title }) {
       address_id: select,
     };
 
-    api.post("payment/checkout/", body).then(async ({ data }) => {
-      var stripe = await loadStripe(data.stripe_public_key);
-      await stripe
-        .redirectToCheckout({
-          sessionId: data.session_id,
-        })
-        .then((res) => {
-          // If `redirectToCheckout` fails due to a browser or network
-          // error, display the localized error message to your customer
-          // using `result.error.message`.
-        });
-    });
+    checkout(body);
   };
 
   if (!state) return <Navigate to="/cart" replace />;
@@ -93,13 +82,14 @@ export default function Checkout({ title }) {
             setShow((prev) => !prev);
           }}
           className="w-100"
+          loading={addressLoading}
         >
           Add address
         </Button>
         <AddressForm show={show} setShow={setShow} />
         <Button
           className="w-100 my-4"
-          loading={isLoading}
+          loading={checkoutLoading || addressLoading}
           onClick={createSession}
           disabled={select === ""}
         >

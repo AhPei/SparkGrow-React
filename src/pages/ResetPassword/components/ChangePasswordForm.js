@@ -43,8 +43,8 @@ export default function ChangePasswordForm({ current, onConfirm }) {
 
     const error = (err) => {
       const data = err.response.data;
-      for (const [key, val] of Object.entries(data))
-        setError((prev) => ({ ...prev, [key]: val[0] }));
+      for (const key in data) 
+        setError((prev) => ({ ...prev, [key]: data[key] }));
     };
 
     if (current) {

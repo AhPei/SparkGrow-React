@@ -11,7 +11,6 @@ import { useAddCart, useSpecificProducts } from "../../api";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 // import AddProduct from "./AddProduct";
-import toast from "react-hot-toast";
 
 export default function Product({ title }) {
   const param = useParams();
@@ -27,15 +26,12 @@ export default function Product({ title }) {
   useDocumentTitle(`${title} ${product?.name}`, isSuccess);
 
   // Mutations
-  const { mutate } = useAddCart();
+  const { mutate, isLoading: addLoading } = useAddCart();
 
   const handleClick = (e) => {
     const { value } = e.target;
 
-    mutate(value, {
-      onError: () => toast.error("Something went error."),
-      onSuccess: () => toast.success("Item added to cart."),
-    });
+    mutate(value);
   };
 
   if (isLoading) return <Loading />;
@@ -76,7 +72,12 @@ export default function Product({ title }) {
             <Row>
               <Col>
                 {stock ? (
-                  <Button value={pid} onClick={handleClick} className="w-100">
+                  <Button
+                    value={pid}
+                    onClick={handleClick}
+                    className="w-100"
+                    loading={addLoading}
+                  >
                     Add to Cart
                   </Button>
                 ) : (

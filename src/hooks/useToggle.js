@@ -10,6 +10,8 @@ const useToggle = (initialState = false) => {
   return [state, toggle];
 };
 
+export default useToggle;
+
 // Usage
 // function App() {
 //     // Call the hook which returns, current value and the toggler function

@@ -1,10 +1,8 @@
 // React
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 
 // Private Route
-import {
-  BrowserRouter as Router, Route, Routes
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./utils/PrivateRoute";
 import Unauthorized from "./utils/Unauthorized";
 
@@ -33,22 +31,34 @@ const SupportAdmin = lazy(() =>
   import("./pages/SupportEngine/components/Admin/SupportAdmin")
 );
 
-// Fun
-import PlayGround from "./Playground/PlayGround";
+// // Dev/Test
+// import Playground from "./Playground/Playground";
+// import showScreenSize from "./utils/showScreenSize";
 
 import Loading from "./components/Loading";
 
 // Api
+import { useQueryClient } from "@tanstack/react-query";
 import { useUser } from "./api/auth";
 
 function App() {
-  const { isSuccess: success, isFetched } = useUser();
+  const { success, isFetched } = useUser();
+  
+  // Load all tabs Login
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    if (success) queryClient.invalidateQueries(["me"]);
+  }, [success]);
+
+  // ScreenSize
+  showScreenSize();
 
   if (!isFetched) return <Loading color="red" />;
 
   return (
     <Router>
       <Suspense fallback={<Loading color="darkblue" />}>
+      {/* <Suspense fallback={<h1>Loading...</h1>}> */}
         <Routes>
           <Route path="/" element={<PrivateRoute success={success} />}>
             <Route path="/" element={<Home title="Home" />} />
@@ -92,7 +102,10 @@ function App() {
           />
           <Route path="/payment/canceled" element={<Payment_Failed />} />
           <Route path="*" element={<NotFound title="404|Not Found" />} />
-          <Route path="/playground" element={<PlayGround title="Playground" />} />
+          {/* <Route
+            path="/playground"
+            element={<Playground title="Playground" />}
+          /> */}
         </Routes>
       </Suspense>
     </Router>

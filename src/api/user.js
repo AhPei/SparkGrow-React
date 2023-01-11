@@ -13,32 +13,6 @@ export const useChangePassword = () => {
   });
 };
 
-// Send Email for Reset Password
-export const useSendResetPassword = () =>
-  useMutation((body) => api.post("auth/users/reset_password/", body), {
-    onSuccess: () => {
-      toast.success(
-        "Reset Password Email has been sent, please check in your SPAM"
-      );
-    },
-  });
-
-// Reset Password
-export const useResetPassword = () =>
-  useMutation((body) => api.post("auth/users/reset_password_confirm/", body), {
-    onSuccess: () => {
-      toast.success("Successfully Reset Password");
-    },
-  });
-
-// Resend Activate Email
-export const useSendResetActivation = () =>
-  useMutation((body) => api.post("auth/users/resend_activation/", body), {
-    onSuccess: () => {
-      toast.success("Active Email has been sent, please check in your SPAM");
-    },
-  });
-
 // Update User
 export const useUpdate = () => {
   const queryClient = useQueryClient();
@@ -56,28 +30,19 @@ export const useUpdate = () => {
     onSuccess: (results, variables, context) => {
       toast.success("Updated", { id: context });
       queryClient.refetchQueries(["me"]);
-      return context
+      return context;
     },
     onSettle: (context) => {
-      toast.dismiss(context)
-    }
+      toast.dismiss(context);
+    },
   });
 };
 
 // Delete Acccount
 export const useDeleteAccount = () => {
-  const queryClient = useQueryClient();
-  const {mutate: logout } = useLogout()
+  const { mutate: logout } = useLogout();
 
-  return useMutation(
-    (data) =>
-      api.delete("auth/users/me/", {
-        data, // Must use data
-      }),
-    {
-      onSuccess: logout,
-      // retry: 5,
-      // retryDelay: 3000, // 3 seconds
-    }
-  );
+  return useMutation((data) => api.delete("auth/users/me/", { data }), {
+    onSuccess: logout,
+  });
 };

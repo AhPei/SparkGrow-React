@@ -46,8 +46,7 @@ export default function ProfileCard() {
 
     const error = (err) => {
       const data = err.response.data;
-      for (const [key, val] of Object.entries(data))
-        setError((prev) => ({ ...prev, [key]: val[0] }));
+      for (const key in data) setError((prev) => ({ ...prev, [key]: val[0] }));
     };
     const success = () => setEdit(false);
 
@@ -83,18 +82,16 @@ export default function ProfileCard() {
   const handleDeleteAccount = () => {
     if (!current_password)
       return setError({ current_password: "Please enter your password." });
-    setError(Object.keys(error).filter((data) => data !== "current_password" ))
+    setError(Object.keys(error).filter((data) => data !== "current_password"));
 
     const onError = (err) => {
       const data = err.response.data;
-      for (const [key, val] of Object.entries(data))
-        setError((prev) => ({ ...prev, [key]: val[0] }));
+      for (const key in data)
+        setError((prev) => ({ ...prev, [key]: data[key] }));
     };
 
     deleteAccount({ current_password }, { onError });
   };
-
-  console.log("ERROR", error)
 
   function Icon() {
     if (edit)
@@ -119,27 +116,27 @@ export default function ProfileCard() {
   }
 
   return (
-    <>
-      <ComfirmModel
-        variant="danger"
-        title="DELETE ACCOUNT"
-        body="Are you sure to delete you account? Never be recovered."
-        confirm="DELETE"
-        onClick={handleDeleteAccount}
-        loading={deleteLoading}
-        show={show}
-        setShow={setShow}
-        cancel
-      >
-        <FloatingLabel
-          type="password"
-          label="Current Password"
-          value={current_password}
-          onChange={setPassword}
-          feedback={error.current_password}
-        />
-      </ComfirmModel>
-      <Card style={{ width: "50%" }} className="py-4 mx-auto">
+
+      <Card className="py-4 mx-auto">
+        <ComfirmModel
+          variant="danger"
+          title="DELETE ACCOUNT"
+          body="Are you sure to delete you account? Never be recovered."
+          confirm="DELETE"
+          onClick={handleDeleteAccount}
+          loading={deleteLoading}
+          show={show}
+          setShow={setShow}
+          cancel
+        >
+          <FloatingLabel
+            type="password"
+            label="Current Password"
+            value={current_password}
+            onChange={setPassword}
+            feedback={error.current_password}
+          />
+        </ComfirmModel>
         <Row>
           <Col className="d-flex justify-content-center mb-3">
             <img
@@ -212,7 +209,7 @@ export default function ProfileCard() {
                         variant="success"
                         type="submit"
                         onClick={handleSubmit}
-                        disabled={isLoading}
+                        loading={isLoading}
                       >
                         Save
                       </Button>
@@ -230,6 +227,5 @@ export default function ProfileCard() {
           )}
         </Form>
       </Card>
-    </>
   );
 }

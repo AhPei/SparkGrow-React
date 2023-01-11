@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, Col, Container, Form, Row } from "react-bootstrap";
 import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 import FloatingLabel from "../../components/FloatingLabel";
-import isEmpty from "../../utils/isEmpty";
 import { useCountdown } from "../../hooks/useCountdown";
+import isEmpty from "../../utils/isEmpty";
 
 const MONTH = [
   "01",
@@ -79,7 +79,6 @@ export default function PaymentForm({ setSuccess }) {
 
   // 0-9 + backspace
   const removeSpecial = (e) => {
-    // console.log(keyCode);
     const { keyCode } = e;
     if (keyCode >= "48" || keyCode <= "57" || keyCode == "8") return;
     e.preventDefault();

@@ -93,8 +93,6 @@ export default UserInput;
 //     setInputHasText(inputHasText);
 //   };
 
-//   console.log(inputHasText);
-
 //   return (
 //     <form
 //       className={`sc-user-input ${inputActive ? "active" : ""}`}

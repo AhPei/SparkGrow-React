@@ -16,7 +16,6 @@ const MyFloatingLabel = ({
 }) => {
   const handleChange = (e) => {
     const { value, files } = e.target;
-    // console.log("VALUE>>", value);
 
     // if (type === "currency") {
     //   const currencyPattern = /^(?!,$)[\d,]*\.?[\d]+$/;

@@ -62,7 +62,6 @@ export default function useWebSocket_UserList() {
     };
     ws.onerror = (e) => {
       toast.error("Something went wrong on socket UserList");
-      console.log("Websocket On Error", e);
       ws.close();
     };
 

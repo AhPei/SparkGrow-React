@@ -1,4 +1,4 @@
-import { Container, Row, Col, Card, Table } from "react-bootstrap";
+import { Card, Col, Container, Row, Table } from "react-bootstrap";
 
 export default function OrderForm({ id, items, total, children }) {
   return (
@@ -48,7 +48,7 @@ export default function OrderForm({ id, items, total, children }) {
               <tbody>
                 <tr>
                   <td>Item Total:</td>
-                  <td>RM {total}</td>
+                  <td>RM {total.toFixed(2)}</td>
                 </tr>
                 <tr>
                   <td>Estimated shipping cost:</td>

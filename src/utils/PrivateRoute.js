@@ -7,17 +7,19 @@ export default function PrivateRoute({ success }) {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Save user location before login
   useEffect(() => {
-    const id = "location";
-    const path = sessionStorage.getItem(id)
+    const name = "location";
+    const path = sessionStorage.getItem(name);
     if (success && path) {
       navigate(path);
-      sessionStorage.removeItem(id);
-    } else sessionStorage.setItem(id, location.pathname);
-  }, []);
+      sessionStorage.removeItem(name);
+    } else if (!success) {
+      sessionStorage.setItem(name, location.pathname);
+    }
+  }, [success]);
 
-  if (!success)
-    return <Navigate to={`/login`} />;
+  if (!success) return <Navigate to={`/login`} />;
 
   return (
     <>

@@ -9,11 +9,6 @@ export default function MessageList({ messages }) {
     // scrollList.current.scrollToEnd({ animated: true }); // react native
   }, [messages]);
 
-  // useEffect(() => {
-  //   console.log(messages)
-  //   scrollList.scrollTop = scrollList.scrollHeight;
-  // }, []);
-
   return (
     <div className="sc-message-list" ref={scrollList}>
       {messages.map((message, key) => (

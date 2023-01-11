@@ -21,7 +21,6 @@ function SupportAdmin() {
   });
 
   useEffect(() => {
-    console.log(select.status)
     readMessage(select.caseID)
   }, [select.caseID, messages]);
 

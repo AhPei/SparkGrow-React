@@ -20,7 +20,7 @@ export default function ProductCard({ data }) {
 
   return (
     <Container>
-      <Row xs={1} md={4} className="g-4">
+      <Row xs={2} md={4} className="g-4">
         {data.map(({ id, name, desc, image, stock, unitprice }, idx) => (
           <Col key={idx}>
             <Card

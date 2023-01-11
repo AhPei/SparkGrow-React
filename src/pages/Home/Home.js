@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
-import {
-  useProductCategory,
-  useProducts,
-  useSearch,
-  useSearchCategory
-} from "../../api";
+import { useProductCategory, useProducts } from "../../api";
 
 // Component
 import Loading from "../../components/Loading";
@@ -15,26 +10,33 @@ import ProductCard from "./ProductCard";
 import { useInView } from "react-intersection-observer";
 
 // Hooks
-import useDebounce from "../../hooks/useDebounce";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const filterList = [
-  "lowest",
-  "highest",
-]
+  { name: "lowest", value: "unitprice" },
+  { name: "highest", value: "-unitprice" },
+];
 
 export default function Home({ title }) {
   // Infinity Scroll
   const { ref, inView } = useInView();
 
+  // inView will be trigger when the screen reach the elemnt detecting by ref
   useEffect(() => {
-    if (inView) fetchNextPage();
+    if (inView) {
+      fetchNextPage();
+    }
   }, [inView]);
 
   const [filter, setFilter] = useState("");
-  const debounce = useDebounce(filter, 500);
-  const [categorySearch, setCategorySearch] = useState("");
-  const [filterSearch, setFilterSearch] = useState("");
+  const [nameSearch, setNameSearch] = useState("");
+  // const nameSearch = useDebounce(filter, 1000); // Search Name
+  const [categorySearch, setCategorySearch] = useState(""); // Clothing...
+  const [filterSearch, setFilterSearch] = useState(""); // LowestPrice...
+
+  useEffect(() => {
+    if (filter === "") setNameSearch("");
+  }, [filter]);
 
   const {
     isLoading: productLoading,
@@ -46,29 +48,21 @@ export default function Home({ title }) {
     fetchNextPage,
     isFetching,
     isFetchingNextPage,
-  } = useProducts();
-  const { data: categoryList, isLoading: categoryLoading } = useProductCategory();
-  const { data: search, isFetching: fetchingSearch } = useSearch(debounce);
-  const { data: categoryResult, isFetching: fetchingCategory } = useSearchCategory(categorySearch);
+  } = useProducts(categorySearch, nameSearch, filterSearch);
+  const { data: categoryList, isLoading: categoryLoading } =
+    useProductCategory();
+
   useDocumentTitle(title, isSuccess);
 
   if (isError) return <span>Error: {error.message}</span>;
 
-  const Product = () => {
-    if (productLoading || categoryLoading || fetchingSearch || fetchingCategory)
-      return <Loading color="green" />;
-
-    let data = search || categoryResult || product?.pages // pages is the rest
-    if (filterSearch.toLowerCase() === "lowest") data = data.sort((a, b) => a.unitprice - b.unitprice) // Ascending 
-    else if (filterSearch.toLowerCase() === "highest") data = data.sort((a, b) => b.unitprice - a.unitprice) // Descending
-    return <ProductCard data={data} />;
-  };
+  if (productLoading || categoryLoading) return <Loading color="green" />;
 
   return (
     <>
-      <Container className="d-flex justify-content-between mb-3">
+      <Container className="mb-3">
         <Row>
-          <Col>
+          <Col xs={4}>
             <FloatingLabel label="Search">
               <Form.Control
                 type="search"
@@ -76,16 +70,19 @@ export default function Home({ title }) {
                 aria-label="Search"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                // onKeyDown={(e) => {
-                //   if (e.key === "Enter") setFilter(e.target.value);
-                // }}
-                style={{ width: "300px" }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") setNameSearch(e.target.value);
+                }}
               />
             </FloatingLabel>
           </Col>
-          <Col>
-            <FloatingLabel label="Category" style={{ minWidth: "100px" }}>
-              <Form.Select value={categorySearch} onChange={(e) => setCategorySearch(e.target.value)}>
+          <Col xs={4}>
+            <FloatingLabel label="Category">
+              <Form.Select
+                value={categorySearch}
+                onChange={(e) => setCategorySearch(e.target.value)}
+                style={{ textTransform: "capitalize" }}
+              >
                 <option value="">All</option>
                 {categoryList?.map(({ id, name }) => (
                   <option
@@ -99,17 +96,20 @@ export default function Home({ title }) {
               </Form.Select>
             </FloatingLabel>
           </Col>
-          <Col>
+          <Col xs={4}>
             <FloatingLabel label="Sort By" style={{ minWidth: "100px" }}>
-              <Form.Select value={filterSearch} onChange={(e) => setFilterSearch(e.target.value)}>
+              <Form.Select
+                value={filterSearch}
+                onChange={(e) => setFilterSearch(e.target.value)}
+              >
                 <option value="">All</option>
-                {filterList?.map((value,idx) => (
+                {filterList?.map(({ name, value }, idx) => (
                   <option
                     key={idx}
                     value={value}
                     style={{ textTransform: "capitalize" }}
                   >
-                    {value}
+                    {name}
                   </option>
                 ))}
               </Form.Select>
@@ -117,7 +117,7 @@ export default function Home({ title }) {
           </Col>
         </Row>
       </Container>
-      <Product />
+      <ProductCard data={product?.pages} />
       <Container className="mt-3">
         <Row>
           <Col className="d-flex justify-content-center">
@@ -125,7 +125,7 @@ export default function Home({ title }) {
               <div
                 ref={ref}
                 disabled={!hasNextPage || isFetchingNextPage}
-                onClick={fetchNextPage}
+                onClick={() => fetchNextPage()}
               >
                 {isFetching && isFetchingNextPage ? <Loading /> : "Load More"}
               </div>

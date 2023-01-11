@@ -3,7 +3,7 @@ import Profile from "../../../../assets/profile.png";
 
 // Left
 export default function ChatList({ chatList, handleSelect, case_ID }) {
-  console.log("CHATLIST", chatList)
+
   return (
     <>
       <Stack

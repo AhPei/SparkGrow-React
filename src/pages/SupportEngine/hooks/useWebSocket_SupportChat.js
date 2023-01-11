@@ -48,7 +48,6 @@ export default function useWebSocket_SupportChat({ caseID, start }) {
     };
     ws.onerror = (e) => {
       toast.error("Something went wrong on socket Chat");
-      console.log("Websocket On Error", e);
       ws.close();
     };
 
@@ -73,9 +72,7 @@ export default function useWebSocket_SupportChat({ caseID, start }) {
   const onSubmit = (content) => {
     try {
       socket.current.send(JSON.stringify({ content }));
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   const handleRetry = (t) => {

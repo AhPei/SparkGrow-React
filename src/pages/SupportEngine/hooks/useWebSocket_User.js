@@ -28,8 +28,6 @@ export default function useWebSocket({ start }) {
     const ws = new W3CWebSocket(link);
     socket.current = ws;
 
-    console.log(link);
-
     ws.onopen = () => setLoading(false);
 
     ws.onclose = (event) => {
@@ -67,9 +65,7 @@ export default function useWebSocket({ start }) {
   const onSubmit = (content) => {
     try {
       socket.current.send(JSON.stringify({ content }));
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   return {

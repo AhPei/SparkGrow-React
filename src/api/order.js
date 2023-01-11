@@ -1,5 +1,6 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import api from "./axios";
+import useQuery from "./useQuery";
 
 // Get All
 export const useAllOrder = () => {

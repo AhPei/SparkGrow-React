@@ -13,12 +13,12 @@ export default function Address() {
   const [add, setAdd] = useState(false);
   const [editData, setEditData] = useState({});
   const [showDelete, setShowDelete] = useState(false);
-  const [showDeleteData, setShowDeleteData] = useState("");
+  const [selectID, setSelectID] = useState("");
 
   const { data: address, isLoading } = useAllAddress();
   const { mutate: remove } = useRemoveAddress();
 
-  const { mutate: update } = useUpdateAddress(showDeleteData);
+  const { mutate: update, isLoading: updateLoading } = useUpdateAddress(selectID);
   const handleSetDefault = () => update({ isDefault: true });
 
   if (isLoading) return <Loading />;
@@ -63,7 +63,7 @@ export default function Address() {
                         size="2rem"
                         onClick={() => {
                           setShowDelete(true);
-                          setShowDeleteData(data.id);
+                          setSelectID(data.id);
                         }}
                       />
                     )}
@@ -74,11 +74,12 @@ export default function Address() {
                     <Button
                       variant="outline-secondary"
                       size="sm"
-                      disabled={data.isDefault}
+                      disabled={data.isDefault || updateLoading}
                       onClick={async () => {
-                        await setShowDeleteData(data.id);
+                        await setSelectID(data.id);
                         handleSetDefault();
                       }}
+                      loading={data.id === selectID &&updateLoading}
                     >
                       Set Default
                     </Button>
@@ -92,7 +93,7 @@ export default function Address() {
       <IsConfirm
         show={showDelete}
         setShow={setShowDelete}
-        onConfirm={() => remove(showDeleteData)}
+        onConfirm={() => remove(selectID)}
       />
       <AddressForm show={add} setShow={setAdd} />
       <AddressForm show={edit} setShow={setEdit} data={editData} />

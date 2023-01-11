@@ -1,12 +1,13 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-
 import api from "./axios";
+import useInfiniteQuery from "./useInfiniteQuery";
+import useQuery from "./useQuery";
 
 // Products
-export const useProducts = () => {
+// page=2& ordering=-unitprice& categories=shoes& limit=1
+export const useProducts = (category="", search="", ordering="" ) => {
   return useInfiniteQuery(
-    ["products"],
-    ({ pageParam = 1 }) => api.get(`product/?page=${pageParam}&limit=12`),
+    ["products",category,search,ordering],
+    ({ pageParam = 1 }) => api.get(`product/?page=${pageParam}&limit=12&ordering=${ordering}&category=${category}&search=${search}`),
     {
       getNextPageParam: (_lastPage, pages) => {
         if (_lastPage.data.next) return pages.length + 1;
@@ -43,7 +44,7 @@ export const useSearch = (search) => {
 // Can Remove
 export const useProductsPage = (page) => {
   const fetchData = (pageParam) =>
-    api.get(`${process.env.REACT_APP_BASE_URL}product?page=${pageParam}`);
+    api.get(`product?page=${pageParam}`);
 
   // Queries
   return useQuery(["productsPage", page], () => fetchData(page), {

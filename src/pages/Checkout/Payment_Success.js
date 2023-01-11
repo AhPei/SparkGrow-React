@@ -1,8 +1,8 @@
-import Payment from "./Payment";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api";
-import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
+import Payment from "./Payment";
 
 export default function Payment_Success() {
   const { session_id } = useParams();
@@ -17,7 +17,7 @@ export default function Payment_Success() {
         setSuccess(!!data);
         if (!data) return navigate("/", { replace: true });
       })
-      .catch((res) => console.log(res))
+      .catch((res) => {})
       .finally(() => setLoading(false));
   }, []);
 
